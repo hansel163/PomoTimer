@@ -1,5 +1,5 @@
 # wxPomoTimer
-A simple timer used for Pomodoro Technique and eye care using wxPython GUI framework.
+A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 
 
 # License
