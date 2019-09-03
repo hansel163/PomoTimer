@@ -222,15 +222,12 @@ class PomoTimer():
         # after clear timer data, set timer to stopped status
         self.state = TimerState.Stopped
 
-    def update_display(self, str=None):
-        if str is not None:
-            self.frame.update_display(str)
-        else:
-            self.frame.update_display(self.running_timer_data.get_str())
+    def update_display(self, blank=False):
+        self.frame.update_display(blank)
 
     def flash_timer(self):
         if self.show_blank:
-            self.update_display("")
+            self.update_display(blank=True)
             self.show_blank = False
         else:
             self.update_display()
