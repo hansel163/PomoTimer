@@ -16,7 +16,7 @@ from events import *
 
 
 TIMER_EDIT_BOX_EXPAND_X = 30
-TIMER_EDIT_BOX_EXPAND_Y = 5
+TIMER_EDIT_BOX_EXPAND_Y = 3
 
 class MainApp(wx.App):
     """Class Main App."""
@@ -36,6 +36,10 @@ class MyTimerEditBox(TimerEditBox):
 
     def m_spinEditOnSpinCtrl(self, event):
         pass
+
+    def OnExitEdit(self, event):
+        self.Hide()
+        event.Skip()
 
 
 class MyDlgSettings(DlgSettings):
@@ -74,15 +78,16 @@ class MyMainFrame(MainFrame):
         # get target position in screen coordinations
         position = self.m_panelTimer.ClientToScreen(target.Position)
         # convert to MainFrame client coordinations
-        real_position = self.ScreenToClient(position)
+        position = self.ScreenToClient(position)
 
         size = wx.Size(target.Size.Width + TIMER_EDIT_BOX_EXPAND_X,
                        target.Size.Height + TIMER_EDIT_BOX_EXPAND_Y)
 
         self.edit_box.m_spinEdit.SetMax(max)
         self.edit_box.m_spinEdit.SetValue(value)
-        self.edit_box.SetPosition(real_position)
+        self.edit_box.SetPosition(position)
         self.edit_box.SetSize(size)
+        self.edit_box.SetFocus()
         self.edit_box.Show()
 
     # Override event handler of double Click on timer display
@@ -91,12 +96,12 @@ class MyMainFrame(MainFrame):
             self.m_staticHour, self.timer.running_timer_data.hour, (MAX_HOUR - 1))
 
     def m_staticMinuteOnLeftDClick(self, event):
-        self.m_spinEdit.SetMax(MAX_MIN_SEC - 1)
-        self.m_spinEdit.SetValue(self.timer.running_timer_data.minute)
+        self.show_spin_ctrl_edit(
+        self.m_staticMinute, self.timer.running_timer_data.minute, (MAX_MIN_SEC - 1))
 
     def m_staticSecondOnLeftDClick(self, event):
-        self.m_spinEdit.SetMax(MAX_MIN_SEC - 1)
-        self.m_spinEdit.SetValue(self.timer.running_timer_data.second)
+        self.show_spin_ctrl_edit(
+        self.m_staticSecond, self.timer.running_timer_data.second, (MAX_MIN_SEC - 1))
 
     def MainFrameOnClose(self, event):
         self.timer.exit()

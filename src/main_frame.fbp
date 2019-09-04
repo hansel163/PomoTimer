@@ -594,11 +594,11 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxBoxSizer" expanded="0">
+                    <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizerButtons</property>
                         <property name="orient">wxHORIZONTAL</property>
@@ -626,7 +626,7 @@
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="current"></property>
-                                <property name="default">1</property>
+                                <property name="default">0</property>
                                 <property name="default_pane">0</property>
                                 <property name="disabled"></property>
                                 <property name="dock">Dock</property>
@@ -897,8 +897,8 @@
         </object>
         <object class="Panel" expanded="1">
             <property name="aui_managed">0</property>
-            <property name="aui_manager_style">wxAUI_MGR_DEFAULT</property>
-            <property name="bg">wxSYS_COLOUR_HIGHLIGHTTEXT</property>
+            <property name="aui_manager_style"></property>
+            <property name="bg"></property>
             <property name="context_help"></property>
             <property name="context_menu">0</property>
             <property name="enabled">1</property>
@@ -911,12 +911,13 @@
             <property name="minimum_size"></property>
             <property name="name">TimerEditBox</property>
             <property name="pos"></property>
-            <property name="size">117,101</property>
+            <property name="size">500,300</property>
             <property name="subclass">; ; forward_declare</property>
             <property name="tooltip"></property>
             <property name="window_extra_style"></property>
             <property name="window_name"></property>
             <property name="window_style">wxBORDER_NONE</property>
+            <event name="OnKillFocus">OnExitEdit</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizer11</property>
@@ -924,7 +925,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="0">
                     <property name="border">5</property>
-                    <property name="flag"></property>
+                    <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxSpinCtrl" expanded="0">
                         <property name="BottomDockable">1</property>
@@ -942,7 +943,7 @@
                         <property name="center_pane">0</property>
                         <property name="close_button">1</property>
                         <property name="context_help"></property>
-                        <property name="context_menu">1</property>
+                        <property name="context_menu">0</property>
                         <property name="default_pane">0</property>
                         <property name="dock">Dock</property>
                         <property name="dock_fixed">0</property>
@@ -974,7 +975,7 @@
                         <property name="resize">Resizable</property>
                         <property name="show">1</property>
                         <property name="size">-1,-1</property>
-                        <property name="style">wxSP_ARROW_KEYS</property>
+                        <property name="style">wxALIGN_CENTER_HORIZONTAL|wxSP_ARROW_KEYS|wxSP_WRAP|wxTE_PROCESS_ENTER</property>
                         <property name="subclass">; ; forward_declare</property>
                         <property name="toolbar_pane">0</property>
                         <property name="tooltip"></property>
@@ -982,7 +983,9 @@
                         <property name="window_extra_style"></property>
                         <property name="window_name"></property>
                         <property name="window_style"></property>
+                        <event name="OnKillFocus">OnExitEdit</event>
                         <event name="OnSpinCtrl">m_spinEditOnSpinCtrl</event>
+                        <event name="OnTextEnter">OnExitEdit</event>
                     </object>
                 </object>
             </object>

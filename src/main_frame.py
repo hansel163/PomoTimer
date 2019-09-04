@@ -101,7 +101,6 @@ class MainFrame ( wx.Frame ):
 
 		self.m_btnStart = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
 
-		self.m_btnStart.SetDefault()
 		self.m_btnStart.SetBitmap( wx.Bitmap( u"res/Start-icon-64.png", wx.BITMAP_TYPE_ANY ) )
 		bSizerButtons.Add( self.m_btnStart, 0, wx.ALL, 5 )
 
@@ -159,24 +158,38 @@ class MainFrame ( wx.Frame ):
 
 class TimerEditBox ( wx.Panel ):
 
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 117,101 ), style = wx.BORDER_NONE, name = wx.EmptyString ):
+	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.BORDER_NONE, name = wx.EmptyString ):
 		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
-
-		self.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
 
 		bSizer11 = wx.BoxSizer( wx.VERTICAL )
 
-		self.m_spinEdit = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.SP_ARROW_KEYS, 0, 59, 10 )
+		self.m_spinEdit = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
 		self.m_spinEdit.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizer11.Add( self.m_spinEdit, 1, 0, 5 )
+		bSizer11.Add( self.m_spinEdit, 1, wx.EXPAND, 5 )
 
 
 		self.SetSizer( bSizer11 )
 		self.Layout()
 
+		# Connect Events
+		self.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
+		self.m_spinEdit.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
+		self.m_spinEdit.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
+		self.m_spinEdit.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
+
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def OnExitEdit( self, event ):
+		event.Skip()
+
+
+	def m_spinEditOnSpinCtrl( self, event ):
+		event.Skip()
+
 
 
 ###########################################################################
