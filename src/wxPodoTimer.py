@@ -10,13 +10,15 @@
 #-------------------------------------------------------------------------------
 import os
 import wx
-from main_frame import MainFrame, DlgSettings, TimerEditBox
+import time
+from main_frame import *
 from pomo_timer import *
 from events import *
 
 
 TIMER_EDIT_BOX_EXPAND_X = 30
-TIMER_EDIT_BOX_EXPAND_Y = 3
+TIMER_EDIT_BOX_EXPAND_Y = 0
+
 
 class MainApp(wx.App):
     """Class Main App."""
@@ -30,18 +32,6 @@ class MainApp(wx.App):
         return super().OnExit()
 
 
-class MyTimerEditBox(TimerEditBox):
-    def __init__(self, parent):
-        TimerEditBox.__init__(self, parent)
-
-    def m_spinEditOnSpinCtrl(self, event):
-        pass
-
-    def OnExitEdit(self, event):
-        self.Hide()
-        event.Skip()
-
-
 class MyDlgSettings(DlgSettings):
     def __init__(self, parent):
         DlgSettings.__init__(self, parent)
@@ -53,8 +43,8 @@ class MyMainFrame(MainFrame):
         MainFrame.__init__(self, parent)
 
         # Init values
-        self.edit_box = MyTimerEditBox(self)
-        self.edit_box.Hide()
+        self.edit_target = None
+
 
         # Connect Events
         self.m_btnStart.Bind(wx.EVT_BUTTON, self.OnStart)
@@ -73,35 +63,40 @@ class MyMainFrame(MainFrame):
             self.m_btnStart.SetBitmap(
                 wx.Bitmap(u"res/Pause-icon-64.png", wx.BITMAP_TYPE_ANY))
 
-    def show_spin_ctrl_edit(self, target, value, max):
-        
-        # get target position in screen coordinations
-        position = self.m_panelTimer.ClientToScreen(target.Position)
-        # convert to MainFrame client coordinations
-        position = self.ScreenToClient(position)
-
+    def show_spin_ctrl_edit(self, target, spinEdit, value, max):
+        target.Hide()
         size = wx.Size(target.Size.Width + TIMER_EDIT_BOX_EXPAND_X,
                        target.Size.Height + TIMER_EDIT_BOX_EXPAND_Y)
 
-        self.edit_box.m_spinEdit.SetMax(max)
-        self.edit_box.m_spinEdit.SetValue(value)
-        self.edit_box.SetPosition(position)
-        self.edit_box.SetSize(size)
-        self.edit_box.SetFocus()
-        self.edit_box.Show()
+        spinEdit.SetMax(max)
+        spinEdit.SetValue("{:0>2d}".format(value))
+        spinEdit.SetMaxSize(size)
+        spinEdit.Show()
+        self.bSizerTimer.Layout()
+        spinEdit.SetFocus()
+        self.edit_target = target
 
     # Override event handler of double Click on timer display
     def m_staticHourOnLeftDClick(self, event):
+        if self.edit_target is not None:
+            return
         self.show_spin_ctrl_edit(
-            self.m_staticHour, self.timer.running_timer_data.hour, (MAX_HOUR - 1))
+            self.m_staticHour, self.m_spinEditHour,
+            self.timer.running_timer_data.hour, (MAX_HOUR - 1))
 
     def m_staticMinuteOnLeftDClick(self, event):
+        if self.edit_target is not None:
+            return
         self.show_spin_ctrl_edit(
-        self.m_staticMinute, self.timer.running_timer_data.minute, (MAX_MIN_SEC - 1))
+            self.m_staticMinute, self.m_spinEditMinute,
+            self.timer.running_timer_data.minute, (MAX_MIN_SEC - 1))
 
     def m_staticSecondOnLeftDClick(self, event):
+        if self.edit_target is not None:
+            return
         self.show_spin_ctrl_edit(
-        self.m_staticSecond, self.timer.running_timer_data.second, (MAX_MIN_SEC - 1))
+            self.m_staticSecond, self.m_spinEditSecond,
+            self.timer.running_timer_data.second, (MAX_MIN_SEC - 1))
 
     def MainFrameOnClose(self, event):
         self.timer.exit()
@@ -131,6 +126,22 @@ class MyMainFrame(MainFrame):
             pass
         dialog.Destroy()
 
+    def OnExitEdit(self, event):
+        if self.edit_target is None:
+            return
+
+        sender = event.GetEventObject()
+        sender.Hide()
+        self.edit_target.Show()
+        self.bSizerTimer.Layout()
+        self.update_target(sender.Value)
+        self.edit_target = None
+        event.Skip()
+
+    def m_spinEditOnSpinCtrl(self, event):
+        sender = event.GetEventObject()
+        self.update_target(sender.Value)
+
     def show_blank_timer(self):
         self.m_staticHour.SetLabel("")
         self.m_staticMinute.SetLabel("")
@@ -143,14 +154,33 @@ class MyMainFrame(MainFrame):
         self.m_staticMinute.SetLabel("{:0>2d}".format(timer_data.minute))
         self.m_staticSecond.SetLabel("{:0>2d}".format(timer_data.second))
 
+    def set_timer_data(self):
+        timer_data = TimerData()
+        timer_data.hour = int(self.m_staticHour.Label)
+        timer_data.minute = int(self.m_staticMinute.Label)
+        timer_data.second = int(self.m_staticSecond.Label)
+        self.timer.set(timer_data)
+
     def update_display(self, blank=False):
         if blank:
             self.show_blank_timer()
         else:
             self.show_timer_data()
     
+    def update_target(self, value):
+        if self.edit_target is None:
+            return
+        
+        self.edit_target.SetLabel("{:0>2d}".format(value))
+        self.set_timer_data()
+
     def alarm_timer(self):
-        pass
+        self.timer.stop()
+        # start count-up timer
+        self.timer.clear()
+        self.timer.start()
+
+        print("Alarm!")
 
 def main():
     app = MainApp(False)

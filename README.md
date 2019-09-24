@@ -6,6 +6,7 @@ A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 - Start/Stop/Pause timer
 - Reset timer when stopped
 - Clear timer
+- Double click to edit
 - 2 cycling timers for working and break
 - Alarm when one timer is run out
 - Show timer on task bar

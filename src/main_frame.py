@@ -17,7 +17,7 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 339,215 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 336,215 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -25,22 +25,29 @@ class MainFrame ( wx.Frame ):
 
 		bSizerIconBar = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticT1Icon = wx.StaticText( self, wx.ID_ANY, u"T1", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticT1Icon.Wrap( -1 )
+		self.m_IconT1 = wx.StaticText( self, wx.ID_ANY, u"T1", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconT1.Wrap( -1 )
 
-		self.m_staticT1Icon.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_IconT1.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerIconBar.Add( self.m_staticT1Icon, 0, wx.ALL, 5 )
+		bSizerIconBar.Add( self.m_IconT1, 0, wx.ALL, 5 )
 
-		self.m_staticT2Icon = wx.StaticText( self, wx.ID_ANY, u"T2", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticT2Icon.Wrap( -1 )
+		self.m_IconT2 = wx.StaticText( self, wx.ID_ANY, u"T2", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconT2.Wrap( -1 )
 
-		self.m_staticT2Icon.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_IconT2.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerIconBar.Add( self.m_staticT2Icon, 0, wx.ALL, 5 )
+		bSizerIconBar.Add( self.m_IconT2, 0, wx.ALL, 5 )
 
 
 		bSizerIconBar.Add( ( 0, 0), 6, wx.EXPAND, 5 )
+
+		self.m_IconAlarm = wx.StaticText( self, wx.ID_ANY, u"Alarm", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconAlarm.Wrap( -1 )
+
+		self.m_IconAlarm.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+		bSizerIconBar.Add( self.m_IconAlarm, 0, wx.ALL, 5 )
 
 
 		bSizerMain.Add( bSizerIconBar, 1, wx.EXPAND, 5 )
@@ -48,53 +55,70 @@ class MainFrame ( wx.Frame ):
 		self.m_panelTimer = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
 		self.m_panelTimer.SetBackgroundColour( wx.SystemSettings.GetColour( wx.SYS_COLOUR_HIGHLIGHTTEXT ) )
 
-		bSizerTimer = wx.BoxSizer( wx.HORIZONTAL )
+		self.bSizerTimer = wx.BoxSizer( wx.HORIZONTAL )
 
 
-		bSizerTimer.Add( ( 0, 0), 3, wx.EXPAND, 5 )
+		self.bSizerTimer.Add( ( 0, 0), 3, wx.EXPAND, 5 )
+
+		self.m_spinEditHour = wx.SpinCtrl( self.m_panelTimer, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
+		self.m_spinEditHour.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+		self.bSizerTimer.Add( self.m_spinEditHour, 0, wx.ALL, 5 )
 
 		self.m_staticHour = wx.StaticText( self.m_panelTimer, wx.ID_ANY, u"00", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticHour.Wrap( -1 )
 
 		self.m_staticHour.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerTimer.Add( self.m_staticHour, 0, wx.ALL, 5 )
+		self.bSizerTimer.Add( self.m_staticHour, 0, wx.ALL, 5 )
 
 		self.m_staticTimerColon1 = wx.StaticText( self.m_panelTimer, wx.ID_ANY, u":", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTimerColon1.Wrap( -1 )
 
 		self.m_staticTimerColon1.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerTimer.Add( self.m_staticTimerColon1, 0, wx.ALL, 5 )
+		self.bSizerTimer.Add( self.m_staticTimerColon1, 0, wx.ALL, 5 )
+
+		self.m_spinEditMinute = wx.SpinCtrl( self.m_panelTimer, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
+		self.m_spinEditMinute.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_spinEditMinute.Hide()
+
+		self.bSizerTimer.Add( self.m_spinEditMinute, 0, wx.ALL, 5 )
 
 		self.m_staticMinute = wx.StaticText( self.m_panelTimer, wx.ID_ANY, u"00", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticMinute.Wrap( -1 )
 
 		self.m_staticMinute.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerTimer.Add( self.m_staticMinute, 0, wx.ALL, 5 )
+		self.bSizerTimer.Add( self.m_staticMinute, 0, wx.ALL, 5 )
 
 		self.m_staticTimerColon2 = wx.StaticText( self.m_panelTimer, wx.ID_ANY, u":", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticTimerColon2.Wrap( -1 )
 
 		self.m_staticTimerColon2.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerTimer.Add( self.m_staticTimerColon2, 0, wx.ALL, 5 )
+		self.bSizerTimer.Add( self.m_staticTimerColon2, 0, wx.ALL, 5 )
+
+		self.m_spinEditSecond = wx.SpinCtrl( self.m_panelTimer, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
+		self.m_spinEditSecond.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_spinEditSecond.Hide()
+
+		self.bSizerTimer.Add( self.m_spinEditSecond, 0, wx.ALL, 5 )
 
 		self.m_staticSecond = wx.StaticText( self.m_panelTimer, wx.ID_ANY, u"00", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticSecond.Wrap( -1 )
 
 		self.m_staticSecond.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
 
-		bSizerTimer.Add( self.m_staticSecond, 0, wx.ALL, 5 )
+		self.bSizerTimer.Add( self.m_staticSecond, 0, wx.ALL, 5 )
 
 
-		bSizerTimer.Add( ( 0, 0), 3, wx.EXPAND, 5 )
+		self.bSizerTimer.Add( ( 0, 0), 3, wx.EXPAND, 5 )
 
 
-		self.m_panelTimer.SetSizer( bSizerTimer )
+		self.m_panelTimer.SetSizer( self.bSizerTimer )
 		self.m_panelTimer.Layout()
-		bSizerTimer.Fit( self.m_panelTimer )
+		self.bSizerTimer.Fit( self.m_panelTimer )
 		bSizerMain.Add( self.m_panelTimer, 9, wx.EXPAND |wx.ALL, 5 )
 
 		bSizerButtons = wx.BoxSizer( wx.HORIZONTAL )
@@ -130,8 +154,17 @@ class MainFrame ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_CLOSE, self.MainFrameOnClose )
+		self.m_spinEditHour.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
+		self.m_spinEditHour.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
+		self.m_spinEditHour.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
 		self.m_staticHour.Bind( wx.EVT_LEFT_DCLICK, self.m_staticHourOnLeftDClick )
+		self.m_spinEditMinute.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
+		self.m_spinEditMinute.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
+		self.m_spinEditMinute.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
 		self.m_staticMinute.Bind( wx.EVT_LEFT_DCLICK, self.m_staticMinuteOnLeftDClick )
+		self.m_spinEditSecond.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
+		self.m_spinEditSecond.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
+		self.m_spinEditSecond.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
 		self.m_staticSecond.Bind( wx.EVT_LEFT_DCLICK, self.m_staticSecondOnLeftDClick )
 
 	def __del__( self ):
@@ -142,54 +175,27 @@ class MainFrame ( wx.Frame ):
 	def MainFrameOnClose( self, event ):
 		event.Skip()
 
-	def m_staticHourOnLeftDClick( self, event ):
-		event.Skip()
-
-	def m_staticMinuteOnLeftDClick( self, event ):
-		event.Skip()
-
-	def m_staticSecondOnLeftDClick( self, event ):
-		event.Skip()
-
-
-###########################################################################
-## Class TimerEditBox
-###########################################################################
-
-class TimerEditBox ( wx.Panel ):
-
-	def __init__( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( 500,300 ), style = wx.BORDER_NONE, name = wx.EmptyString ):
-		wx.Panel.__init__ ( self, parent, id = id, pos = pos, size = size, style = style, name = name )
-
-		bSizer11 = wx.BoxSizer( wx.VERTICAL )
-
-		self.m_spinEdit = wx.SpinCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
-		self.m_spinEdit.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
-
-		bSizer11.Add( self.m_spinEdit, 1, wx.EXPAND, 5 )
-
-
-		self.SetSizer( bSizer11 )
-		self.Layout()
-
-		# Connect Events
-		self.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
-		self.m_spinEdit.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
-		self.m_spinEdit.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
-		self.m_spinEdit.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
-
-	def __del__( self ):
-		pass
-
-
-	# Virtual event handlers, overide them in your derived class
 	def OnExitEdit( self, event ):
 		event.Skip()
-
 
 	def m_spinEditOnSpinCtrl( self, event ):
 		event.Skip()
 
+
+	def m_staticHourOnLeftDClick( self, event ):
+		event.Skip()
+
+
+
+
+	def m_staticMinuteOnLeftDClick( self, event ):
+		event.Skip()
+
+
+
+
+	def m_staticSecondOnLeftDClick( self, event ):
+		event.Skip()
 
 
 ###########################################################################

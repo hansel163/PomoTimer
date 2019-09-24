@@ -238,6 +238,10 @@ class PomoTimer():
 
     def OnTimerTick(self, event):
         if self.state == TimerState.Running:
+            # alarm is count-down timer is 0:0:0
+            if self.step == -1 and self.running_timer_data.is_zero():
+                self.alarm_timer()
+
             self.running_timer_data.step(self.step)
             # update UI
             self.update_display()
