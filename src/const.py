@@ -7,11 +7,12 @@ MAX_MIN_SEC = 60
 
 @enum.unique
 class TimerState(enum.Enum):
-    Stopped = 0
-    Running = 1
-    Paused = 2
-    Overflowed = 3
-    Alarmed = 4
+    Invalid = 0
+    Stopped = 1
+    Running = 2
+    Paused = 3
+    Overflowed = 4
+    Alarmed = 5
 
 
 @enum.unique

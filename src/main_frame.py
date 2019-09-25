@@ -42,11 +42,17 @@ class MainFrame ( wx.Frame ):
 
 		bSizerIconBar.Add( ( 0, 0), 6, wx.EXPAND, 5 )
 
+		self.m_IconOverflow = wx.StaticText( self, wx.ID_ANY, u"Overflow", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconOverflow.Wrap( -1 )
+
+		self.m_IconOverflow.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+		bSizerIconBar.Add( self.m_IconOverflow, 0, wx.ALL, 5 )
+
 		self.m_IconAlarm = wx.StaticText( self, wx.ID_ANY, u"Alarm", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_IconAlarm.Wrap( -1 )
 
 		self.m_IconAlarm.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
-		self.m_IconAlarm.Hide()
 
 		bSizerIconBar.Add( self.m_IconAlarm, 0, wx.ALL, 5 )
 
@@ -63,6 +69,7 @@ class MainFrame ( wx.Frame ):
 
 		self.m_spinEditHour = wx.SpinCtrl( self.m_panelTimer, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( -1,-1 ), wx.ALIGN_CENTER_HORIZONTAL|wx.SP_ARROW_KEYS|wx.SP_WRAP|wx.TE_PROCESS_ENTER, 0, 59, 10 )
 		self.m_spinEditHour.SetFont( wx.Font( 36, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_spinEditHour.Hide()
 
 		self.bSizerTimer.Add( self.m_spinEditHour, 0, wx.ALL, 5 )
 

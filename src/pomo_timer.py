@@ -13,6 +13,7 @@ import wx
 import time
 from events import *
 from const import *
+from state_machine import TimerStateMachine
 
 
 class TimerData():
@@ -64,7 +65,7 @@ class TimerData():
             and (self._second == (MAX_MIN_SEC-1))
 
     def is_zero(self):
-        return (self._hour == 0)
+        return (self._hour == 0) \
             and (self._minute == 0) and (self._second == 0)
 
     def set(self, hour=0, minute=0, second=0):
@@ -127,12 +128,11 @@ class TimerThread(threading.Thread):
         self.exit_flag = False
 
     def tick(self):
-        if self.win is None:
-            return
-        # Create the event
-        evt = TimerTickEvent()
-        # Post the event
-        wx.PostEvent(self.win, evt)
+        if self.win:
+            # Create the event
+            evt = TimerTickEvent()
+            # Post the event
+            wx.PostEvent(self.win, evt)
 
     def set_sleep(self, sleep):
         self.sleep = sleep
@@ -154,86 +154,72 @@ class TimerThread(threading.Thread):
 
 
 class PomoTimer():
-    def __init__(self, frame, timer_data=None):
+    def __init__(self, manager, id, timer_data=None):
         if timer_data is None:
             self.timer_data = TimerData()
         else:
             self.timer_data = timer_data
-        self.frame = frame
+        self.manager = manager
+        self.id = id
 
         self.step = 1
+        self.state_machine = TimerStateMachine(self)
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
-        self.state = TimerState.Stopped
+
         self.show_blank = False     # for flashing timer display
 
-    def exit(self):
-        self.state = TimerState.Stopped
-
-    def __del__(self):
-        self.exit()
-
-    def set(self, timer_data):
+    def set_timer_data(self, timer_data):
         self.timer_data = timer_data
         self.running_timer_data.copy(self.timer_data)
 
     def get_state(self):
-        return self.state
+        return self.state_machine.get_state()
+
+    def get_prev_state(self):
+        return self.state_machine.get_prev_state()
+
+    def calc_step(self):
+        if self.timer_data.is_zero():
+            self.step = 1   # count up
+        else:
+            self.step = -1  # count down        
 
     def start(self):
-        if self.state != TimerState.Paused:
-            if self.timer_data.is_zero():
-                self.step = 1   # count up
-            else:
-                self.step = -1  # count down
-
-        self.state = TimerState.Running
+        pass
 
     def pause(self):
-        self.state = TimerState.Paused
+        pass
 
     def stop(self):
+        pass
+
+    def restore_timer(self):
         # restore original timer data
         self.running_timer_data.copy(self.timer_data)
-        self.update_display()
-        self.state = TimerState.Stopped
 
     def clear(self):
-        # do not clear timer data when timer is running
-        if self.state == TimerState.Running:
-            return
-
         self.timer_data.clear()
         self.running_timer_data.clear()
-        self.update_display()
-        # after clear timer data, set timer to stopped status
-        self.state = TimerState.Stopped
 
-    def update_display(self, blank=False):
-        self.frame.update_display(blank)
+    def timer_expired(self):
+        self.step = 1   # do count-up
+        self.state_machine.on_alarm()
+        self.manager.timer_expired(self)
 
-    def flash_timer(self):
-        if self.show_blank:
-            self.update_display(blank=True)
-            self.show_blank = False
-        else:
-            self.update_display()
-            self.show_blank = True
-
-    def alarm_timer(self):
-        self.frame.alarm_timer()
+    def timer_overflow(self):
+        self.state_machine.on_overflow()
+        self.manager.timer_overflow(self)
 
     def tick(self):
-        if self.state == TimerState.Running:
-            # alarm is count-down timer is 0:0:0
-            if self.step == -1 and self.running_timer_data.is_zero():
-                self.alarm_timer()
-
+        state = self.state_machine.get_state()
+        if state == TimerState.Running or state == TimerState.Alarmed:
             self.running_timer_data.step(self.step)
-            # update UI
-            self.update_display()
-        elif self.state == TimerState.Paused:
-            self.flash_timer()
+            # count-down timer is 0:0:0
+            if self.running_timer_data.is_zero():
+                self.timer_expired()
+            elif self.running_timer_data.is_max():
+                self.timer_overflow()
 
 
 class TimerManager():
@@ -242,42 +228,69 @@ class TimerManager():
 
         # Init values
         self.timer_idx = 0
-        self.timers = {"T1": PomoTimer(self), "T2": PomoTimer(self)}
+        self.timers = [PomoTimer(self, 0), PomoTimer(self, 1)]
 
         # Start timer thread
-        self.timer_thread = TimerThread(self)
+        self.timer_thread = TimerThread(frame)
         self.timer_thread.start()
-        self.timer_thread.go()
 
     def OnTimerTick(self):
         for timer in self.timers:
             timer.tick()
-    
+
     def OnStart(self):
-        if self.timer.get_state() == TimerState.Running:  # pause timer
-            self.SetStartBtn()
-            self.timer.pause()
-        else:  # start timer
-            self.timer.start()
-            self.SetStartBtn(False)
+        if not self.timer_thread.running:
+            self.timer_thread.go()
+
+        self.timers[self.timer_idx].state_machine.on_start()
+
+    def OnPause(self):
+        self.timers[self.timer_idx].state_machine.on_pause()
 
     def OnStop(self):
-        self.timer.stop()
-        self.SetStartBtn()
+        self.timers[self.timer_idx].state_machine.on_stop()
 
     def OnClear(self):
-        self.timer.clear()
-
-    def OnSet(self):
-        dialog = MyDlgSettings(self)
-        result = dialog.ShowModal()
-        if result == wx.ID_OK:
-            pass
-        else:
-            pass
-        dialog.Destroy()
+        if self.timers[self.timer_idx].get_state() == TimerState.Stopped:
+            self.timers[self.timer_idx].clear()
 
     def OnExit(self):
         if self.timer_thread.is_alive():
             self.timer_thread.exit()
             self.timer_thread.join()
+
+    def set_timer_idx(self, index):
+        self.timer_idx = index
+
+    def get_timer_data(self):
+        return self.timers[self.timer_idx].running_timer_data
+
+    def set_timer_data(self, timer_data):
+        self.timers[self.timer_idx].set_timer_data(timer_data)
+
+    def get_timer_state(self, timer_idx):
+        return self.timers[timer_idx].get_state()
+
+    def get_current_timer_state(self):
+        return self.get_timer_state(self.timer_idx)
+
+    def get_timer_prev_state(self, timer_idx):
+        return self.timers[timer_idx].get_prev_state()
+
+    def get_current_timer_prev_state(self):
+        return self.get_timer_prev_state(self.timer_idx)
+
+    def timer_expired(self, timer):
+        self.frame.update_view()
+        self.frame.do_alarm()
+
+    def timer_overflow(self, timer):
+        self.frame.update_view()
+
+
+def test():
+    pass
+
+
+if __name__ == '__main__':
+    test()

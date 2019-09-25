@@ -20,7 +20,7 @@
 <XPD:OBJ name="DiagramView" type="UMLClassDiagramView" guid="gS3tXDWi2ka5NuJBwk491QAA">
 <XPD:REF name="Model">7nEAYCeOjUGzxh/BPE6e6AAA</XPD:REF>
 <XPD:REF name="Diagram">7nEAYCeOjUGzxh/BPE6e6AAA</XPD:REF>
-<XPD:ATTR name="#OwnedViews" type="integer">8</XPD:ATTR>
+<XPD:ATTR name="#OwnedViews" type="integer">9</XPD:ATTR>
 <XPD:OBJ name="OwnedViews[0]" type="UMLClassView" guid="A32hZuBY3kSbn2EOlAZ/3QAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
@@ -148,8 +148,8 @@
 <XPD:OBJ name="OwnedViews[4]" type="UMLClassView" guid="4rGLFXXrfEeHAIAWO0PXBQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">476</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">440</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1176</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">100</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">96</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">126</XPD:ATTR>
 <XPD:REF name="Model">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
@@ -179,8 +179,8 @@
 <XPD:OBJ name="OwnedViews[5]" type="UMLClassView" guid="jYHKhovn3UOZ4EoqMq+PBgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">728</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">328</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1172</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">352</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">100</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">94</XPD:ATTR>
 <XPD:REF name="Model">eVobjfYPeEaj4XcbnmB29QAA</XPD:REF>
@@ -210,8 +210,8 @@
 <XPD:OBJ name="OwnedViews[6]" type="UMLClassView" guid="kKjl1iAit0ioMpTICJruvgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">924</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">356</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1172</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">484</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">98</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">78</XPD:ATTR>
 <XPD:REF name="Model">UVaTaerg7kmS9WisziOJGwAA</XPD:REF>
@@ -241,8 +241,8 @@
 <XPD:OBJ name="OwnedViews[7]" type="UMLClassView" guid="TrJj++b1GUGGJ2fAtOTPngAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">712</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">532</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">1152</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">260</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">90</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">46</XPD:ATTR>
 <XPD:REF name="Model">jYjpT4jK70mP03sYGWTsgAAA</XPD:REF>
@@ -267,6 +267,37 @@
 <XPD:OBJ name="TemplateParameterCompartment" type="UMLTemplateParameterCompartmentView" guid="lP67D6U7oUy0acBeCa9i6AAA">
 <XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
 <XPD:REF name="Model">jYjpT4jK70mP03sYGWTsgAAA</XPD:REF>
+</XPD:OBJ>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedViews[8]" type="UMLClassView" guid="akb6jEaHbky6shE2RVPnAwAA">
+<XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
+<XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">496</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">416</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">121</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">56</XPD:ATTR>
+<XPD:REF name="Model">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
+<XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="yLZAA8IudE+cBmGLFh6LDQAA">
+<XPD:OBJ name="NameLabel" type="LabelView" guid="vYPZRoXfg06eeTFblnuoBwAA">
+<XPD:ATTR name="FontStyle" type="integer">1</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">TimerStateMachine</XPD:ATTR>
+</XPD:OBJ>
+<XPD:OBJ name="StereotypeLabel" type="LabelView" guid="U1E1ix7OiE21r359xAZVgQAA">
+<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
+</XPD:OBJ>
+<XPD:OBJ name="PropertyLabel" type="LabelView" guid="alyw1nTn3kWj70N/7sxAPQAA">
+<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
+</XPD:OBJ>
+</XPD:OBJ>
+<XPD:OBJ name="AttributeCompartment" type="UMLAttributeCompartmentView" guid="ti6y9OjvQUq/S3fUs5FohwAA">
+<XPD:REF name="Model">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="OperationCompartment" type="UMLOperationCompartmentView" guid="gGJtSGZLYk+fWeoqAv8ZTgAA">
+<XPD:REF name="Model">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="TemplateParameterCompartment" type="UMLTemplateParameterCompartmentView" guid="hLF6YUvkV02/azmR/BU3XwAA">
+<XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
+<XPD:REF name="Model">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 </XPD:OBJ>
@@ -317,7 +348,7 @@
 <XPD:REF name="EntryState">Q7X/1D+Hp0yT/v5D+AXTOgAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="tMQYYjwVoUmgW+G6ibwPtwAA">
-<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2 gray, no Alarm</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2, no Overflow, no Alarm</XPD:ATTR>
 <XPD:REF name="EntryState">Q7X/1D+Hp0yT/v5D+AXTOgAA</XPD:REF>
 </XPD:OBJ>
 <XPD:ATTR name="#DoActivities" type="integer">1</XPD:ATTR>
@@ -339,22 +370,23 @@
 <XPD:ATTR name="#Incomings" type="integer">2</XPD:ATTR>
 <XPD:REF name="Incomings[0]">qw3SysvfU0eD/TIPnCE9PQAA</XPD:REF>
 <XPD:REF name="Incomings[1]">78cdfnNT7kywmibJrSVCtwAA</XPD:REF>
-<XPD:ATTR name="#EntryActions" type="integer">4</XPD:ATTR>
+<XPD:ATTR name="#EntryActions" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="EntryActions[0]" type="UMLUninterpretedAction" guid="b4huWZtLzE6XG/QmhXkY1AAA">
 <XPD:ATTR name="Name" type="string">Pause Timer</XPD:ATTR>
 <XPD:REF name="EntryState">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="EntryActions[1]" type="UMLUninterpretedAction" guid="ZLJqDj8tCUCeyWHlNRwBGAAA">
-<XPD:ATTR name="Name" type="string">Timer Data blinking</XPD:ATTR>
-<XPD:REF name="EntryState">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
-</XPD:OBJ>
-<XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="U9GnSogzPUaVoTHuNRhWzgAA">
+<XPD:OBJ name="EntryActions[1]" type="UMLUninterpretedAction" guid="U9GnSogzPUaVoTHuNRhWzgAA">
 <XPD:ATTR name="Name" type="string">Show Btns: Start, Stop, Clear(disabled)</XPD:ATTR>
 <XPD:REF name="EntryState">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="EntryActions[3]" type="UMLUninterpretedAction" guid="BIHQabQF+k+kNFOku+bZjwAA">
-<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2 gray, no Alarm</XPD:ATTR>
+<XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="BIHQabQF+k+kNFOku+bZjwAA">
+<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2, no Overflow, Alarm keep state</XPD:ATTR>
 <XPD:REF name="EntryState">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
+</XPD:OBJ>
+<XPD:ATTR name="#DoActivities" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="DoActivities[0]" type="UMLUninterpretedAction" guid="R51eSyQq+0iFEQshub7S2gAA">
+<XPD:ATTR name="Name" type="string">Timer Data blinking</XPD:ATTR>
+<XPD:REF name="DoActivityState">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="Subvertices[3]" type="UMLCompositeState" guid="srtg6BaYnk2to+jXhCuBbAAA">
@@ -385,8 +417,13 @@
 <XPD:REF name="EntryState">srtg6BaYnk2to+jXhCuBbAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="EntryActions[3]" type="UMLUninterpretedAction" guid="yP1aNPavkE+RnnoGtzV+HwAA">
-<XPD:ATTR name="Name" type="string">Show Icons: T1, T2 gray, no Alarm</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Show Icons: T1, T2, no Overflow, no Alarm</XPD:ATTR>
 <XPD:REF name="EntryState">srtg6BaYnk2to+jXhCuBbAAA</XPD:REF>
+</XPD:OBJ>
+<XPD:ATTR name="#ExitActions" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="ExitActions[0]" type="UMLUninterpretedAction" guid="eQEhkWqOuUWThn0/rLU4AAAA">
+<XPD:ATTR name="Name" type="string">Calc step according to timer data</XPD:ATTR>
+<XPD:REF name="ExitState">srtg6BaYnk2to+jXhCuBbAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:ATTR name="#DoActivities" type="integer">1</XPD:ATTR>
 <XPD:OBJ name="DoActivities[0]" type="UMLUninterpretedAction" guid="NFZs7iI8R0G8CjlSpiY44QAA">
@@ -409,25 +446,16 @@
 <XPD:REF name="Incomings[1]">x3gucxWSoEWvXaLLZcxGZwAA</XPD:REF>
 <XPD:ATTR name="#EntryActions" type="integer">3</XPD:ATTR>
 <XPD:OBJ name="EntryActions[0]" type="UMLUninterpretedAction" guid="A35+8wGlS0aWdw2JAu1HCwAA">
-<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2 gray, Alarm blink</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2, no Overflow, Alarm blink</XPD:ATTR>
 <XPD:REF name="EntryState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="EntryActions[1]" type="UMLUninterpretedAction" guid="wM8zZXeXkUqUmTfHpgJqagAA">
-<XPD:ATTR name="Name" type="string">Other alarm actions according to settings(Sound/Notification/...)</XPD:ATTR>
-<XPD:REF name="EntryState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
-</XPD:OBJ>
-<XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="zkuipr2dzUSY92FzLC9TQgAA">
+<XPD:OBJ name="EntryActions[1]" type="UMLUninterpretedAction" guid="zkuipr2dzUSY92FzLC9TQgAA">
 <XPD:ATTR name="Name" type="string">Show Btns: Pause, Stop, Clear(disabled)</XPD:ATTR>
 <XPD:REF name="EntryState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
 </XPD:OBJ>
-<XPD:ATTR name="#ExitActions" type="integer">2</XPD:ATTR>
-<XPD:OBJ name="ExitActions[0]" type="UMLUninterpretedAction" guid="RXUj5ph9AE+CFAPcouUgaAAA">
-<XPD:ATTR name="Name" type="string">Clear Icon Alarm</XPD:ATTR>
-<XPD:REF name="ExitState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
-</XPD:OBJ>
-<XPD:OBJ name="ExitActions[1]" type="UMLUninterpretedAction" guid="x/75TXZLMkKETLFAmEXl9wAA">
-<XPD:ATTR name="Name" type="string">Clear alarm actions</XPD:ATTR>
-<XPD:REF name="ExitState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
+<XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="wM8zZXeXkUqUmTfHpgJqagAA">
+<XPD:ATTR name="Name" type="string">Do alarm actions according to settings(Sound/Notification/...)</XPD:ATTR>
+<XPD:REF name="EntryState">Umfew/FfOEKnNh/TVS143AAA</XPD:REF>
 </XPD:OBJ>
 <XPD:ATTR name="#DoActivities" type="integer">1</XPD:ATTR>
 <XPD:OBJ name="DoActivities[0]" type="UMLUninterpretedAction" guid="6b/Asdh3zESpgpV50Yz8uAAA">
@@ -452,7 +480,7 @@
 <XPD:REF name="EntryState">YFU+SHbpSkeHDN5WUAOhBAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="EntryActions[1]" type="UMLUninterpretedAction" guid="qC3XP6DxDkq6kp1SDYwRngAA">
-<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2 gray, Alarm keep current state</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">Show Icons: T1 blink, T2, Overflow, Alarm keep state</XPD:ATTR>
 <XPD:REF name="EntryState">YFU+SHbpSkeHDN5WUAOhBAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="EntryActions[2]" type="UMLUninterpretedAction" guid="XyfGVqCK/02tKokAa2XyvAAA">
@@ -557,9 +585,9 @@
 <XPD:OBJ name="OwnedViews[3]" type="UMLStateView" guid="gFR8NtfA5kO01OTicLeGTwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Left" type="integer">148</XPD:ATTR>
-<XPD:ATTR name="Top" type="integer">380</XPD:ATTR>
-<XPD:ATTR name="Width" type="integer">276</XPD:ATTR>
+<XPD:ATTR name="Left" type="integer">136</XPD:ATTR>
+<XPD:ATTR name="Top" type="integer">376</XPD:ATTR>
+<XPD:ATTR name="Width" type="integer">311</XPD:ATTR>
 <XPD:ATTR name="Height" type="integer">100</XPD:ATTR>
 <XPD:REF name="Model">7Mie627Zg0WQROMmXiJB1AAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="iCkAyVPKpUKnjxIz1KaDTwAA">
@@ -603,7 +631,7 @@
 <XPD:OBJ name="OwnedViews[5]" type="UMLTransitionView" guid="id2T7ulrCkSEbiLgA20lYAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">800,131;664,200;366,380</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">800,131;664,200;372,376</XPD:ATTR>
 <XPD:REF name="Model">qw3SysvfU0eD/TIPnCE9PQAA</XPD:REF>
 <XPD:REF name="Head">gFR8NtfA5kO01OTicLeGTwAA</XPD:REF>
 <XPD:REF name="Tail">JwHxxoHDPUCR6vcFS4FvMwAA</XPD:REF>
@@ -629,7 +657,7 @@
 <XPD:OBJ name="OwnedViews[6]" type="UMLTransitionView" guid="8U8ZH1bZr02Yw91qaimfjgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">286,380;289,155</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">291,376;290,155</XPD:ATTR>
 <XPD:REF name="Model">EMAcMCfcNU2zAW2dmYNI+AAA</XPD:REF>
 <XPD:REF name="Head">eczTn/4y+UGH3JT6oL6okwAA</XPD:REF>
 <XPD:REF name="Tail">gFR8NtfA5kO01OTicLeGTwAA</XPD:REF>
@@ -779,7 +807,7 @@
 <XPD:OBJ name="OwnedViews[12]" type="UMLTransitionView" guid="SfSd4PFIzEq9dTv9edEuKAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">347,380;612,172;741,131</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">353,376;612,172;741,131</XPD:ATTR>
 <XPD:REF name="Model">OKpSexhyFUyzVGJ9z2SBRwAA</XPD:REF>
 <XPD:REF name="Head">JwHxxoHDPUCR6vcFS4FvMwAA</XPD:REF>
 <XPD:REF name="Tail">gFR8NtfA5kO01OTicLeGTwAA</XPD:REF>
@@ -831,7 +859,7 @@
 <XPD:OBJ name="OwnedViews[14]" type="UMLTransitionView" guid="fNXdY7GShEiJVIg6e7wefgAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">760,416;596,396;423,414</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">760,416;596,396;446,410</XPD:ATTR>
 <XPD:REF name="Model">78cdfnNT7kywmibJrSVCtwAA</XPD:REF>
 <XPD:REF name="Head">gFR8NtfA5kO01OTicLeGTwAA</XPD:REF>
 <XPD:REF name="Tail">YQiXeGyy30yfHBvM1PDEFwAA</XPD:REF>
@@ -857,13 +885,13 @@
 <XPD:OBJ name="OwnedViews[15]" type="UMLTransitionView" guid="GtSFKf57i0qKGGUjiioBTwAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">423,436;592,444;760,443</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">446,435;592,444;760,443</XPD:ATTR>
 <XPD:REF name="Model">x3gucxWSoEWvXaLLZcxGZwAA</XPD:REF>
 <XPD:REF name="Head">YQiXeGyy30yfHBvM1PDEFwAA</XPD:REF>
 <XPD:REF name="Tail">gFR8NtfA5kO01OTicLeGTwAA</XPD:REF>
 <XPD:OBJ name="NameLabel" type="EdgeLabelView" guid="GH4UUWX8VEqyql95SmXILgAA">
-<XPD:ATTR name="Alpha" type="real">-2.89152106486348</XPD:ATTR>
-<XPD:ATTR name="Distance" type="real">74.4647567645259</XPD:ATTR>
+<XPD:ATTR name="Alpha" type="real">-2.55954153581251</XPD:ATTR>
+<XPD:ATTR name="Distance" type="real">32.4499614791759</XPD:ATTR>
 <XPD:ATTR name="Text" type="string">Press Start [From Alaramed] </XPD:ATTR>
 <XPD:REF name="Model">x3gucxWSoEWvXaLLZcxGZwAA</XPD:REF>
 </XPD:OBJ>
@@ -1354,7 +1382,7 @@
 </XPD:OBJ>
 </XPD:OBJ>
 </XPD:OBJ>
-<XPD:ATTR name="#OwnedElements" type="integer">8</XPD:ATTR>
+<XPD:ATTR name="#OwnedElements" type="integer">9</XPD:ATTR>
 <XPD:OBJ name="OwnedElements[0]" type="UMLClass" guid="TKefSvla2EKi8ULWPtOvjAAA">
 <XPD:ATTR name="Name" type="string">TimerManager</XPD:ATTR>
 <XPD:REF name="Namespace">OAL+J1nZK0CAxQtAaARtqQAA</XPD:REF>
@@ -1388,7 +1416,7 @@
 <XPD:ATTR name="Name" type="string">OnSet</XPD:ATTR>
 <XPD:REF name="Owner">TKefSvla2EKi8ULWPtOvjAAA</XPD:REF>
 </XPD:OBJ>
-<XPD:ATTR name="#Attributes" type="integer">4</XPD:ATTR>
+<XPD:ATTR name="#Attributes" type="integer">5</XPD:ATTR>
 <XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="cq03iB11+E2lZ7LTqTitQAAA">
 <XPD:ATTR name="Name" type="string">timer[2]:PomoTimer</XPD:ATTR>
 <XPD:REF name="Owner">TKefSvla2EKi8ULWPtOvjAAA</XPD:REF>
@@ -1409,6 +1437,12 @@
 <XPD:ATTR name="Name" type="string">work_mode</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">WorkMode</XPD:ATTR>
 <XPD:REF name="Type_">eVobjfYPeEaj4XcbnmB29QAA</XPD:REF>
+<XPD:REF name="Owner">TKefSvla2EKi8ULWPtOvjAAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[4]" type="UMLAttribute" guid="AZYWa89XukqMyljPbP+j5wAA">
+<XPD:ATTR name="Name" type="string">alarm</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">AlarmAction</XPD:ATTR>
+<XPD:REF name="Type_">jYjpT4jK70mP03sYGWTsgAAA</XPD:REF>
 <XPD:REF name="Owner">TKefSvla2EKi8ULWPtOvjAAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
@@ -1441,7 +1475,7 @@
 <XPD:ATTR name="Name" type="string">tick</XPD:ATTR>
 <XPD:REF name="Owner">FwjY/cWfi06/jsv55QPeXwAA</XPD:REF>
 </XPD:OBJ>
-<XPD:ATTR name="#Attributes" type="integer">5</XPD:ATTR>
+<XPD:ATTR name="#Attributes" type="integer">6</XPD:ATTR>
 <XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="zmpyhjMy9kOAaOaHQJgrfQAA">
 <XPD:ATTR name="Name" type="string">timer_data</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">TimerData</XPD:ATTR>
@@ -1453,9 +1487,9 @@
 <XPD:REF name="Owner">FwjY/cWfi06/jsv55QPeXwAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Attributes[2]" type="UMLAttribute" guid="bCjmwVLPN0ur2N71wumzLgAA">
-<XPD:ATTR name="Name" type="string">state</XPD:ATTR>
-<XPD:ATTR name="TypeExpression" type="string">TimerState</XPD:ATTR>
-<XPD:REF name="Type_">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
+<XPD:ATTR name="Name" type="string">state_machine</XPD:ATTR>
+<XPD:ATTR name="TypeExpression" type="string">TimerStateMachine</XPD:ATTR>
+<XPD:REF name="Type_">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
 <XPD:REF name="Owner">FwjY/cWfi06/jsv55QPeXwAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Attributes[3]" type="UMLAttribute" guid="IRNkrM8Lk0Kbuh1sKBrBhwAA">
@@ -1467,6 +1501,10 @@
 <XPD:ATTR name="Name" type="string">mode</XPD:ATTR>
 <XPD:ATTR name="TypeExpression" type="string">TimerMode</XPD:ATTR>
 <XPD:REF name="Type_">UVaTaerg7kmS9WisziOJGwAA</XPD:REF>
+<XPD:REF name="Owner">FwjY/cWfi06/jsv55QPeXwAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[5]" type="UMLAttribute" guid="C/ulert8kkiHI0+RaHw3awAA">
+<XPD:ATTR name="Name" type="string">id</XPD:ATTR>
 <XPD:REF name="Owner">FwjY/cWfi06/jsv55QPeXwAA</XPD:REF>
 </XPD:OBJ>
 </XPD:OBJ>
@@ -1593,26 +1631,28 @@
 <XPD:REF name="Views[1]">nJaIKT2ZKkm9uZe8L/GYRwAA</XPD:REF>
 <XPD:REF name="Views[2]">pz3t9pCfh06X2eYKvueNMwAA</XPD:REF>
 <XPD:REF name="Views[3]">D/8rMgF8AUahxztEUzxKsAAA</XPD:REF>
-<XPD:ATTR name="#TypedFeatures" type="integer">1</XPD:ATTR>
-<XPD:REF name="TypedFeatures[0]">bCjmwVLPN0ur2N71wumzLgAA</XPD:REF>
-<XPD:ATTR name="#Attributes" type="integer">5</XPD:ATTR>
-<XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="q4BMJl06hkerX4JSJ29z4AAA">
-<XPD:ATTR name="Name" type="string">Paused</XPD:ATTR>
+<XPD:ATTR name="#Attributes" type="integer">6</XPD:ATTR>
+<XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="sMOFj1KgJUqZA9nXFk0rcgAA">
+<XPD:ATTR name="Name" type="string">Init</XPD:ATTR>
 <XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="Attributes[1]" type="UMLAttribute" guid="yCkFXSY+WU2PzoiNFZrkPAAA">
-<XPD:ATTR name="Name" type="string">Running</XPD:ATTR>
-<XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
-</XPD:OBJ>
-<XPD:OBJ name="Attributes[2]" type="UMLAttribute" guid="78qifeb69ECpAA5COcotZAAA">
+<XPD:OBJ name="Attributes[1]" type="UMLAttribute" guid="78qifeb69ECpAA5COcotZAAA">
 <XPD:ATTR name="Name" type="string">Stopped</XPD:ATTR>
 <XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="Attributes[3]" type="UMLAttribute" guid="U8jbvklvRUyPBh7m3QxhCgAA">
+<XPD:OBJ name="Attributes[2]" type="UMLAttribute" guid="yCkFXSY+WU2PzoiNFZrkPAAA">
+<XPD:ATTR name="Name" type="string">Running</XPD:ATTR>
+<XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[3]" type="UMLAttribute" guid="q4BMJl06hkerX4JSJ29z4AAA">
+<XPD:ATTR name="Name" type="string">Paused</XPD:ATTR>
+<XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Attributes[4]" type="UMLAttribute" guid="U8jbvklvRUyPBh7m3QxhCgAA">
 <XPD:ATTR name="Name" type="string">Overflowed</XPD:ATTR>
 <XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
 </XPD:OBJ>
-<XPD:OBJ name="Attributes[4]" type="UMLAttribute" guid="ZfUh7eVqgUGzr83IEquoHwAA">
+<XPD:OBJ name="Attributes[5]" type="UMLAttribute" guid="ZfUh7eVqgUGzr83IEquoHwAA">
 <XPD:ATTR name="Name" type="string">Alarmed</XPD:ATTR>
 <XPD:REF name="Owner">IQZgdqKa6Eq40Eeu2hbzsgAA</XPD:REF>
 </XPD:OBJ>
@@ -1665,6 +1705,24 @@
 <XPD:REF name="Views[1]">qNyLRElzvEKRm1ogG4XoMQAA</XPD:REF>
 <XPD:REF name="Views[2]">WMgr4zlbu0CO4QPaGeq4dAAA</XPD:REF>
 <XPD:REF name="Views[3]">lP67D6U7oUy0acBeCa9i6AAA</XPD:REF>
+<XPD:ATTR name="#TypedFeatures" type="integer">1</XPD:ATTR>
+<XPD:REF name="TypedFeatures[0]">AZYWa89XukqMyljPbP+j5wAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="OwnedElements[8]" type="UMLClass" guid="OIX7nlDS00WrBPrh8/7lLwAA">
+<XPD:ATTR name="Name" type="string">TimerStateMachine</XPD:ATTR>
+<XPD:REF name="Namespace">OAL+J1nZK0CAxQtAaARtqQAA</XPD:REF>
+<XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
+<XPD:REF name="Views[0]">akb6jEaHbky6shE2RVPnAwAA</XPD:REF>
+<XPD:REF name="Views[1]">ti6y9OjvQUq/S3fUs5FohwAA</XPD:REF>
+<XPD:REF name="Views[2]">gGJtSGZLYk+fWeoqAv8ZTgAA</XPD:REF>
+<XPD:REF name="Views[3]">hLF6YUvkV02/azmR/BU3XwAA</XPD:REF>
+<XPD:ATTR name="#TypedFeatures" type="integer">1</XPD:ATTR>
+<XPD:REF name="TypedFeatures[0]">bCjmwVLPN0ur2N71wumzLgAA</XPD:REF>
+<XPD:ATTR name="#Attributes" type="integer">1</XPD:ATTR>
+<XPD:OBJ name="Attributes[0]" type="UMLAttribute" guid="ZZ/VkKZlQkGctngtCPpoFwAA">
+<XPD:ATTR name="Name" type="string">previous_state</XPD:ATTR>
+<XPD:REF name="Owner">OIX7nlDS00WrBPrh8/7lLwAA</XPD:REF>
+</XPD:OBJ>
 </XPD:OBJ>
 </XPD:OBJ>
 </XPD:OBJ>
