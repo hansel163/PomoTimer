@@ -54,7 +54,7 @@
             <property name="window_name"></property>
             <property name="window_style">wxTAB_TRAVERSAL</property>
             <property name="xrc_skip_sizer">1</property>
-            <event name="OnClose">MainFrameOnClose</event>
+            <event name="OnClose">OnClose</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerMain</property>
@@ -850,11 +850,11 @@
                         </object>
                     </object>
                 </object>
-                <object class="sizeritem" expanded="0">
+                <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxBoxSizer" expanded="0">
+                    <object class="wxBoxSizer" expanded="1">
                         <property name="minimum_size"></property>
                         <property name="name">bSizerButtons</property>
                         <property name="orient">wxHORIZONTAL</property>
@@ -929,6 +929,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnStart</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
@@ -1001,6 +1002,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnStop</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
@@ -1073,6 +1075,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnClear</event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="0">
@@ -1145,6 +1148,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnButtonClick">OnSet</event>
                             </object>
                         </object>
                     </object>

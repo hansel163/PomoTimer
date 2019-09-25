@@ -14,6 +14,7 @@ import time
 from main_frame import *
 from pomo_timer import *
 from events import *
+from const import *
 
 
 TIMER_EDIT_BOX_EXPAND_X = 30
@@ -43,17 +44,11 @@ class MyMainFrame(MainFrame):
         MainFrame.__init__(self, parent)
 
         # Init values
+        self.timer_manager = TimerManager(self)
         self.edit_target = None
 
-
         # Connect Events
-        self.m_btnStart.Bind(wx.EVT_BUTTON, self.OnStart)
-        self.m_btnStop.Bind(wx.EVT_BUTTON, self.OnStop)
-        self.m_btnClear.Bind(wx.EVT_BUTTON, self.OnClear)
-        self.m_btnSet.Bind(wx.EVT_BUTTON, self.OnSet)
-
-        self.timer = PomoTimer(self)
-        self.Bind(EVT_TIMER_TICK, self.timer.OnTimerTick)
+        self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
 
     def SetStartBtn(self, start=True):
         if start:
@@ -63,13 +58,13 @@ class MyMainFrame(MainFrame):
             self.m_btnStart.SetBitmap(
                 wx.Bitmap(u"res/Pause-icon-64.png", wx.BITMAP_TYPE_ANY))
 
-    def show_spin_ctrl_edit(self, target, spinEdit, value, max):
+    def show_spin_ctrl_edit(self, target, spinEdit, max):
         target.Hide()
         size = wx.Size(target.Size.Width + TIMER_EDIT_BOX_EXPAND_X,
                        target.Size.Height + TIMER_EDIT_BOX_EXPAND_Y)
 
         spinEdit.SetMax(max)
-        spinEdit.SetValue("{:0>2d}".format(value))
+        spinEdit.SetValue(target.label)
         spinEdit.SetMaxSize(size)
         spinEdit.Show()
         self.bSizerTimer.Layout()
@@ -81,33 +76,32 @@ class MyMainFrame(MainFrame):
         if self.edit_target is not None:
             return
         self.show_spin_ctrl_edit(
-            self.m_staticHour, self.m_spinEditHour,
-            self.timer.running_timer_data.hour, (MAX_HOUR - 1))
+            self.m_staticHour, self.m_spinEditHour, (MAX_HOUR - 1))
 
     def m_staticMinuteOnLeftDClick(self, event):
         if self.edit_target is not None:
             return
         self.show_spin_ctrl_edit(
-            self.m_staticMinute, self.m_spinEditMinute,
-            self.timer.running_timer_data.minute, (MAX_MIN_SEC - 1))
+            self.m_staticMinute, self.m_spinEditMinute, (MAX_MIN_SEC - 1))
 
     def m_staticSecondOnLeftDClick(self, event):
         if self.edit_target is not None:
             return
         self.show_spin_ctrl_edit(
-            self.m_staticSecond, self.m_spinEditSecond,
-            self.timer.running_timer_data.second, (MAX_MIN_SEC - 1))
+            self.m_staticSecond, self.m_spinEditSecond, (MAX_MIN_SEC - 1))
 
-    def MainFrameOnClose(self, event):
-        self.timer.exit()
+    def OnClose(self, event):
+        self.timer_manager.OnExit()
         event.Skip()    # the default event handler does call Destroy()
 
+    def OnTimerTick(self, event):
+        self.timer_manager.OnTimerTick()
+
     def OnStart(self, event):
+        self.timer_manager.OnStart()
         if self.timer.get_state() == TimerState.Running: # pause timer
             self.SetStartBtn()
-            self.timer.pause()
         else: # start timer
-            self.timer.start()
             self.SetStartBtn(False)
 
     def OnStop(self, event):

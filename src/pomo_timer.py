@@ -1,4 +1,4 @@
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Name:        timer
 # Purpose:     implement timer functions
 #
@@ -7,15 +7,12 @@
 # Created:     01/09/2019
 # Copyright:   (c) Hansel He 2019
 # Licence:     MIT
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 import threading
 import wx
 import time
-import enum
 from events import *
-
-MAX_HOUR = 100
-MAX_MIN_SEC = 60
+from const import *
 
 
 class TimerData():
@@ -67,14 +64,15 @@ class TimerData():
             and (self._second == (MAX_MIN_SEC-1))
 
     def is_zero(self):
-        return (self._hour == 0) and (self._minute == 0) and (self._second == 0)
+        return (self._hour == 0)
+            and (self._minute == 0) and (self._second == 0)
 
     def set(self, hour=0, minute=0, second=0):
         self.hour = hour
         self.minute = minute
         self.second = second
 
-    def clear(self): # set hour, minute and second to 0
+    def clear(self):  # set hour, minute and second to 0
         self.set()
 
     def set_max(self):
@@ -91,7 +89,7 @@ class TimerData():
     def step_second(self, value):
         second = self.second + value
         self.second = second % MAX_MIN_SEC
-        return second // MAX_MIN_SEC # borrow or loan from minute
+        return second // MAX_MIN_SEC  # borrow or loan from minute
 
     def step_minute(self, value):
         minute = self.minute + value
@@ -105,35 +103,36 @@ class TimerData():
         if hour >= MAX_HOUR:
             self.set_max()
             return 1
-        elif hour < 0: # underflow, set to all zero
+        elif hour < 0:  # underflow, set to all zero
             self.clear()
             return -1
         else:
             self.hour = hour
             return 0
-    
+
     # negative value is decrease, positive value is increase
     def step(self, value=1):
         minute = self.step_second(value)
         hour = self.step_minute(minute)
         overflow = self.step_hour(hour)
-        return overflow       
+        return overflow
+
 
 class TimerThread(threading.Thread):
-    def __init__(self, frame=None, sleep=1):
+    def __init__(self, win=None, sleep=1):
         super(TimerThread, self).__init__()
-        self.frame = frame
+        self.win = win
         self.sleep = sleep
         self.running = False
         self.exit_flag = False
 
     def tick(self):
-        if self.frame is None:
+        if self.win is None:
             return
         # Create the event
         evt = TimerTickEvent()
         # Post the event
-        wx.PostEvent(self.frame, evt)
+        wx.PostEvent(self.win, evt)
 
     def set_sleep(self, sleep):
         self.sleep = sleep
@@ -154,12 +153,6 @@ class TimerThread(threading.Thread):
                 self.tick()
 
 
-@enum.unique
-class TimerState(enum.Enum):
-    Stopped = 0
-    Running = 1
-    Paused = 2
-
 class PomoTimer():
     def __init__(self, frame, timer_data=None):
         if timer_data is None:
@@ -167,8 +160,7 @@ class PomoTimer():
         else:
             self.timer_data = timer_data
         self.frame = frame
-        self.timer_thread = TimerThread(frame)
-        self.timer_thread.start()
+
         self.step = 1
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
@@ -176,10 +168,7 @@ class PomoTimer():
         self.show_blank = False     # for flashing timer display
 
     def exit(self):
-        if self.timer_thread.is_alive():
-            self.timer_thread.exit()
-            self.timer_thread.join()
-            self.state = TimerState.Stopped
+        self.state = TimerState.Stopped
 
     def __del__(self):
         self.exit()
@@ -198,14 +187,12 @@ class PomoTimer():
             else:
                 self.step = -1  # count down
 
-        self.timer_thread.go()
         self.state = TimerState.Running
 
     def pause(self):
         self.state = TimerState.Paused
 
     def stop(self):
-        self.timer_thread.stop()
         # restore original timer data
         self.running_timer_data.copy(self.timer_data)
         self.update_display()
@@ -236,7 +223,7 @@ class PomoTimer():
     def alarm_timer(self):
         self.frame.alarm_timer()
 
-    def OnTimerTick(self, event):
+    def tick(self):
         if self.state == TimerState.Running:
             # alarm is count-down timer is 0:0:0
             if self.step == -1 and self.running_timer_data.is_zero():
@@ -248,8 +235,49 @@ class PomoTimer():
         elif self.state == TimerState.Paused:
             self.flash_timer()
 
-                
-            
 
+class TimerManager():
+    def __init__(self, frame):
+        self.frame = frame
 
+        # Init values
+        self.timer_idx = 0
+        self.timers = {"T1": PomoTimer(self), "T2": PomoTimer(self)}
 
+        # Start timer thread
+        self.timer_thread = TimerThread(self)
+        self.timer_thread.start()
+        self.timer_thread.go()
+
+    def OnTimerTick(self):
+        for timer in self.timers:
+            timer.tick()
+    
+    def OnStart(self):
+        if self.timer.get_state() == TimerState.Running:  # pause timer
+            self.SetStartBtn()
+            self.timer.pause()
+        else:  # start timer
+            self.timer.start()
+            self.SetStartBtn(False)
+
+    def OnStop(self):
+        self.timer.stop()
+        self.SetStartBtn()
+
+    def OnClear(self):
+        self.timer.clear()
+
+    def OnSet(self):
+        dialog = MyDlgSettings(self)
+        result = dialog.ShowModal()
+        if result == wx.ID_OK:
+            pass
+        else:
+            pass
+        dialog.Destroy()
+
+    def OnExit(self):
+        if self.timer_thread.is_alive():
+            self.timer_thread.exit()
+            self.timer_thread.join()

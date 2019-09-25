@@ -46,6 +46,7 @@ class MainFrame ( wx.Frame ):
 		self.m_IconAlarm.Wrap( -1 )
 
 		self.m_IconAlarm.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_IconAlarm.Hide()
 
 		bSizerIconBar.Add( self.m_IconAlarm, 0, wx.ALL, 5 )
 
@@ -153,7 +154,7 @@ class MainFrame ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
-		self.Bind( wx.EVT_CLOSE, self.MainFrameOnClose )
+		self.Bind( wx.EVT_CLOSE, self.OnClose )
 		self.m_spinEditHour.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
 		self.m_spinEditHour.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
 		self.m_spinEditHour.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
@@ -166,13 +167,17 @@ class MainFrame ( wx.Frame ):
 		self.m_spinEditSecond.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
 		self.m_spinEditSecond.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
 		self.m_staticSecond.Bind( wx.EVT_LEFT_DCLICK, self.m_staticSecondOnLeftDClick )
+		self.m_btnStart.Bind( wx.EVT_BUTTON, self.OnStart )
+		self.m_btnStop.Bind( wx.EVT_BUTTON, self.OnStop )
+		self.m_btnClear.Bind( wx.EVT_BUTTON, self.OnClear )
+		self.m_btnSet.Bind( wx.EVT_BUTTON, self.OnSet )
 
 	def __del__( self ):
 		pass
 
 
 	# Virtual event handlers, overide them in your derived class
-	def MainFrameOnClose( self, event ):
+	def OnClose( self, event ):
 		event.Skip()
 
 	def OnExitEdit( self, event ):
@@ -195,6 +200,18 @@ class MainFrame ( wx.Frame ):
 
 
 	def m_staticSecondOnLeftDClick( self, event ):
+		event.Skip()
+
+	def OnStart( self, event ):
+		event.Skip()
+
+	def OnStop( self, event ):
+		event.Skip()
+
+	def OnClear( self, event ):
+		event.Skip()
+
+	def OnSet( self, event ):
 		event.Skip()
 
 
