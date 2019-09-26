@@ -56,6 +56,13 @@ class MainFrame ( wx.Frame ):
 
 		bSizerIconBar.Add( self.m_IconAlarm, 0, wx.ALL, 5 )
 
+		self.m_IconMode = wx.StaticText( self, wx.ID_ANY, u"Alt", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconMode.Wrap( -1 )
+
+		self.m_IconMode.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+		bSizerIconBar.Add( self.m_IconMode, 0, wx.ALL, 5 )
+
 
 		bSizerMain.Add( bSizerIconBar, 1, wx.EXPAND, 5 )
 

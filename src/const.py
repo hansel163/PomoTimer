@@ -16,7 +16,7 @@ class TimerState(enum.Enum):
 
 
 @enum.unique
-class WorkMode(enum.Enum):
+class TimerMgrMode(enum.Enum):
     Standalone = 0
     Alternation = 1
 
@@ -25,3 +25,18 @@ class WorkMode(enum.Enum):
 class TimerMode(enum.Enum):
     OneShot = 0
     Cycling = 1
+
+
+@enum.unique
+class WorkMode(enum.Enum):
+    OneShot = 0
+    Cycling = 1
+    Alternation = 2
+
+
+# Timer Work Mode Icon String
+WORKMODE_ICON_STR = {
+    WorkMode.OneShot: '   ',
+    WorkMode.Cycling: 'Cyc',
+    WorkMode.Alternation: 'Alt'
+}

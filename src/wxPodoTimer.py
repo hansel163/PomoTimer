@@ -195,10 +195,15 @@ class MyMainFrame(MainFrame):
         self.set_icon_Tn_font()
         for idx, icon in enumerate(self.icon_Tn):
             timer_state = self.timer_manager.get_timer_state(idx)
-            if timer_state == TimerState.Stopped:
-                icon.Show()
+            label = "T{}".format(idx+1)
+            if timer_state == TimerState.Stopped or self.showing:
+                icon.SetLabel(label)
             else:
-                icon.Show(self.showing)
+                icon.SetLabel('  ')
+
+        # show timer mode icon
+        work_mode = self.timer_manager.get_work_mode()
+        self.m_IconMode.SetLabel(WORKMODE_ICON_STR[work_mode])
 
         if state == TimerState.Stopped or state == TimerState.Running:
             self.m_IconOverflow.Hide()

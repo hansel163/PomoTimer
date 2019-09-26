@@ -163,6 +163,7 @@ class PomoTimer():
         self.id = id
 
         self.step = 1
+        self.mode = TimerMode.OneShot
         self.state_machine = TimerStateMachine(self)
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
@@ -228,6 +229,7 @@ class TimerManager():
 
         # Init values
         self.timer_idx = 0
+        self.mode = TimerMgrMode.Standalone
         self.timers = [PomoTimer(self, 0), PomoTimer(self, 1)]
 
         # Start timer thread
@@ -279,6 +281,14 @@ class TimerManager():
 
     def get_current_timer_prev_state(self):
         return self.get_timer_prev_state(self.timer_idx)
+
+    def get_work_mode(self):
+        if self.mode == TimerMgrMode.Alternation:
+            return WorkMode.Alternation
+        elif self.timers[self.timer_idx].mode == TimerMode.Cycling:
+            return WorkMode.Cycling
+        else:
+            return WorkMode.OneShot
 
     def timer_expired(self, timer):
         self.frame.update_view()
