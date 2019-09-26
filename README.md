@@ -3,20 +3,19 @@ A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 
 # Features
 - Time count down or up
-- Start/Stop/Pause timer
+- Start/Stop/Pause/Clear timer
 - Reset timer when stopped
-- Clear timer
-- Double click to edit
+- Double click to edit timer
 - 2 alternation timers for working and break
-- Alarm when one timer is run out
+- Alarm when one timer is expired
 - Show icon on system tray
 - Max timer: 99:59:59
 - Setting:
    * Set hour/minute/second of each timer
-   * Single or cycling
-   * One timer cycling or 2 timer cycling
+   * Timer mode: Oneshot or cycling for each timer
+   * Standalone or 2 timers alternating
    * Alarm enable/disable
-   * Alarm style: Sound/Pop-up window/Windows notification/Flashing on task bar
+   * Alarm style: Sound/Windows notification
    * Select alarm sound from audio file
 
 # TODO
@@ -25,7 +24,7 @@ A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 - Ticking sound when timer is running
 - Mini display mode
 - Show timer data on task bar
-
+- Flashing on task bar when alarm
 - Statistics:
    * Working and break period count
    * Each timer time-out count

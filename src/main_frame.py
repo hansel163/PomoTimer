@@ -25,19 +25,19 @@ class MainFrame ( wx.Frame ):
 
 		bSizerIconBar = wx.BoxSizer( wx.HORIZONTAL )
 
+		self.m_IconT0 = wx.StaticText( self, wx.ID_ANY, u"T0", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_IconT0.Wrap( -1 )
+
+		self.m_IconT0.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+
+		bSizerIconBar.Add( self.m_IconT0, 0, wx.ALL, 5 )
+
 		self.m_IconT1 = wx.StaticText( self, wx.ID_ANY, u"T1", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_IconT1.Wrap( -1 )
 
-		self.m_IconT1.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_IconT1.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Arial" ) )
 
 		bSizerIconBar.Add( self.m_IconT1, 0, wx.ALL, 5 )
-
-		self.m_IconT2 = wx.StaticText( self, wx.ID_ANY, u"T2", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_IconT2.Wrap( -1 )
-
-		self.m_IconT2.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Arial" ) )
-
-		bSizerIconBar.Add( self.m_IconT2, 0, wx.ALL, 5 )
 
 
 		bSizerIconBar.Add( ( 0, 0), 3, wx.EXPAND, 5 )
@@ -169,8 +169,8 @@ class MainFrame ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_CLOSE, self.OnClose )
+		self.m_IconT0.Bind( wx.EVT_LEFT_DCLICK, self.OnIconTnLeftDClick )
 		self.m_IconT1.Bind( wx.EVT_LEFT_DCLICK, self.OnIconTnLeftDClick )
-		self.m_IconT2.Bind( wx.EVT_LEFT_DCLICK, self.OnIconTnLeftDClick )
 		self.m_spinEditHour.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
 		self.m_spinEditHour.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
 		self.m_spinEditHour.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
@@ -242,59 +242,128 @@ class MainFrame ( wx.Frame ):
 class DlgSettings ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 292,212 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,416 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
 		bSizerDlgMain = wx.BoxSizer( wx.VERTICAL )
 
-		sbSizerTimer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer1" ), wx.HORIZONTAL )
+		m_TimerMgrModeChoices = [ u"Standalone", u"Alternation" ]
+		self.m_TimerMgrMode = wx.RadioBox( self, wx.ID_ANY, u"Mode", wx.DefaultPosition, wx.DefaultSize, m_TimerMgrModeChoices, 1, wx.RA_SPECIFY_ROWS )
+		self.m_TimerMgrMode.SetSelection( 0 )
+		bSizerDlgMain.Add( self.m_TimerMgrMode, 0, wx.ALL, 5 )
 
-		self.m_spinHour1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 99, 0 )
-		sbSizerTimer1.Add( self.m_spinHour1, 0, wx.ALL, 5 )
+		sbSizerTimer0 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer0" ), wx.VERTICAL )
+
+		bSizerTimerData0 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_spinHour0 = wx.SpinCtrl( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 99, 0 )
+		bSizerTimerData0.Add( self.m_spinHour0, 0, wx.ALL, 5 )
+
+		self.m_staticColon01 = wx.StaticText( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticColon01.Wrap( -1 )
+
+		bSizerTimerData0.Add( self.m_staticColon01, 0, wx.ALL, 5 )
+
+		self.m_spinMinute0 = wx.SpinCtrl( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 59, 0 )
+		bSizerTimerData0.Add( self.m_spinMinute0, 0, wx.ALL, 5 )
+
+		self.m_staticColon02 = wx.StaticText( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticColon02.Wrap( -1 )
+
+		bSizerTimerData0.Add( self.m_staticColon02, 0, wx.ALL, 5 )
+
+		self.m_spinSecond0 = wx.SpinCtrl( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 59, 0 )
+		bSizerTimerData0.Add( self.m_spinSecond0, 0, wx.ALL, 5 )
+
+		self.m_chkCycling0 = wx.CheckBox( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, u"Cycling", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizerTimerData0.Add( self.m_chkCycling0, 0, wx.ALL, 5 )
+
+
+		sbSizerTimer0.Add( bSizerTimerData0, 1, wx.EXPAND, 5 )
+
+
+		bSizerDlgMain.Add( sbSizerTimer0, 1, wx.EXPAND, 5 )
+
+		sbSizerTimer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer1" ), wx.VERTICAL )
+
+		bSizerTimerData1 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_spinHour1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 99, 0 )
+		bSizerTimerData1.Add( self.m_spinHour1, 0, wx.ALL, 5 )
 
 		self.m_staticColon11 = wx.StaticText( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticColon11.Wrap( -1 )
 
-		sbSizerTimer1.Add( self.m_staticColon11, 0, wx.ALL, 5 )
+		bSizerTimerData1.Add( self.m_staticColon11, 0, wx.ALL, 5 )
 
-		self.m_spinMinute1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 59, 0 )
-		sbSizerTimer1.Add( self.m_spinMinute1, 0, wx.ALL, 5 )
+		self.m_spinMinute1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 59, 0 )
+		bSizerTimerData1.Add( self.m_spinMinute1, 0, wx.ALL, 5 )
 
 		self.m_staticColon12 = wx.StaticText( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticColon12.Wrap( -1 )
 
-		sbSizerTimer1.Add( self.m_staticColon12, 0, wx.ALL, 5 )
+		bSizerTimerData1.Add( self.m_staticColon12, 0, wx.ALL, 5 )
 
-		self.m_spinSecond1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 59, 0 )
-		sbSizerTimer1.Add( self.m_spinSecond1, 0, wx.ALL, 5 )
+		self.m_spinSecond1 = wx.SpinCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 0, 59, 0 )
+		bSizerTimerData1.Add( self.m_spinSecond1, 0, wx.ALL, 5 )
+
+		self.m_chkCycling1 = wx.CheckBox( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, u"Cycling", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizerTimerData1.Add( self.m_chkCycling1, 0, wx.ALL, 5 )
+
+
+		sbSizerTimer1.Add( bSizerTimerData1, 1, wx.EXPAND, 5 )
 
 
 		bSizerDlgMain.Add( sbSizerTimer1, 1, wx.EXPAND, 5 )
 
-		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer2" ), wx.HORIZONTAL )
+		sbSizerAlarm = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Alarm" ), wx.VERTICAL )
 
-		self.m_spinHour2 = wx.SpinCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 99, 0 )
-		sbSizer2.Add( self.m_spinHour2, 0, wx.ALL, 5 )
+		bSizerSound = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_staticColon21 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticColon21.Wrap( -1 )
+		self.m_chkAlarmSound = wx.CheckBox( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Sound:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_chkAlarmSound.SetValue(True)
+		bSizerSound.Add( self.m_chkAlarmSound, 0, wx.ALL, 5 )
 
-		sbSizer2.Add( self.m_staticColon21, 0, wx.ALL, 5 )
+		self.m_staticSoundFile = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Sound File Path", wx.DefaultPosition, wx.DefaultSize, wx.ST_ELLIPSIZE_MIDDLE )
+		self.m_staticSoundFile.Wrap( -1 )
 
-		self.m_spinMinute2 = wx.SpinCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 59, 0 )
-		sbSizer2.Add( self.m_spinMinute2, 0, wx.ALL, 5 )
-
-		self.m_staticColon22 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"：", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticColon22.Wrap( -1 )
-
-		sbSizer2.Add( self.m_staticColon22, 0, wx.ALL, 5 )
-
-		self.m_spinSecond2 = wx.SpinCtrl( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 60,-1 ), wx.SP_ARROW_KEYS, 0, 59, 0 )
-		sbSizer2.Add( self.m_spinSecond2, 0, wx.ALL, 5 )
+		bSizerSound.Add( self.m_staticSoundFile, 0, wx.ALL, 5 )
 
 
-		bSizerDlgMain.Add( sbSizer2, 1, wx.EXPAND, 5 )
+		bSizerSound.Add( ( 0, 0), 1, wx.EXPAND, 5 )
+
+		self.m_btnSelSound = wx.Button( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"...", wx.DefaultPosition, wx.Size( 20,20 ), wx.BU_BOTTOM )
+		bSizerSound.Add( self.m_btnSelSound, 0, wx.ALL, 5 )
+
+
+		sbSizerAlarm.Add( bSizerSound, 1, wx.EXPAND, 5 )
+
+		self.m_chkAlarmNotification = wx.CheckBox( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Notification", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_chkAlarmNotification.SetValue(True)
+		sbSizerAlarm.Add( self.m_chkAlarmNotification, 0, wx.ALL, 5 )
+
+		bSizerDuration = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticDuration = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Duration:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticDuration.Wrap( -1 )
+
+		bSizerDuration.Add( self.m_staticDuration, 0, wx.ALL, 5 )
+
+		self.m_textDuration = wx.TextCtrl( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"8", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_textDuration.SetMaxLength( 1 )
+		bSizerDuration.Add( self.m_textDuration, 0, wx.ALL, 5 )
+
+		self.m_staticText21 = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Second(s)", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText21.Wrap( -1 )
+
+		bSizerDuration.Add( self.m_staticText21, 0, wx.ALL, 5 )
+
+
+		sbSizerAlarm.Add( bSizerDuration, 1, wx.EXPAND, 5 )
+
+
+		bSizerDlgMain.Add( sbSizerAlarm, 1, wx.EXPAND, 5 )
 
 		bSizerButton = wx.BoxSizer( wx.HORIZONTAL )
 

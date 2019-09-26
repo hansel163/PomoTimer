@@ -1,4 +1,5 @@
 import enum
+import os
 
 
 APP_NAME = 'wxPomoTimer'
@@ -41,3 +42,20 @@ WORKMODE_ICON_STR = {
     WorkMode.Cycling: 'Cyc',
     WorkMode.Alternation: 'Alt'
 }
+
+class Utils(object):
+    def __init__(self):
+        super().__init__()
+    
+    @classmethod
+    def is_file_access(cls, file):
+        return os.access(file, os.F_OK)
+
+    @classmethod
+    def limit_int(cls, value, min_val, max_val):
+        if value < min_val:
+            return min_val
+        elif value > max_val:
+            return max_val
+        else:
+            return value

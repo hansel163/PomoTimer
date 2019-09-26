@@ -12,7 +12,7 @@ import threading
 import wx
 import time
 from events import *
-from const import *
+from utils import *
 from state_machine import TimerStateMachine
 
 
@@ -26,7 +26,9 @@ class TimerData():
 
     @hour.setter
     def hour(self, value):
-        if value < MAX_HOUR:
+        if value < 0:
+            self._hour = 0
+        elif value < MAX_HOUR:
             self._hour = value
         else:
             self._hour = value % MAX_HOUR   # overflowed
@@ -37,7 +39,9 @@ class TimerData():
 
     @minute.setter
     def minute(self, value):
-        if value < MAX_MIN_SEC:
+        if value < 0:
+            self._minute = 0
+        elif value < MAX_MIN_SEC:
             self._minute = value
         else:
             self._minute = value % MAX_MIN_SEC   # overflowed
@@ -48,7 +52,9 @@ class TimerData():
 
     @second.setter
     def second(self, value):
-        if value < MAX_MIN_SEC:
+        if value < 0:
+            self._second = 0
+        elif value < MAX_MIN_SEC:
             self._second = value
         else:
             self._second = value % MAX_MIN_SEC   # overflowed
@@ -72,6 +78,15 @@ class TimerData():
         self.hour = hour
         self.minute = minute
         self.second = second
+
+    def set_from_string(self, timer_data_str):
+        data = timer_data_str.split(':')
+        time = [int(x) for x in data]
+        if len(time) != 3:
+            return False
+        else:
+            self.set(time[0], time[1], time[2])
+            return True
 
     def clear(self):  # set hour, minute and second to 0
         self.set()
@@ -154,7 +169,7 @@ class TimerThread(threading.Thread):
 
 
 class PomoTimer():
-    def __init__(self, manager, id, timer_data=None):
+    def __init__(self, manager, id, timer_data=None, mode=TimerMode.OneShot):
         if timer_data is None:
             self.timer_data = TimerData()
         else:
@@ -163,7 +178,7 @@ class PomoTimer():
         self.id = id
 
         self.step = 1
-        self.mode = TimerMode.OneShot
+        self.mode = mode
         self.state_machine = TimerStateMachine(self)
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
@@ -171,6 +186,9 @@ class PomoTimer():
     def set_timer_data(self, timer_data):
         self.timer_data = timer_data
         self.running_timer_data.copy(self.timer_data)
+
+    def set_mode(self, mode):
+        self.mode = mode
 
     def get_state(self):
         return self.state_machine.get_state()
@@ -222,12 +240,12 @@ class PomoTimer():
 
 
 class TimerManager():
-    def __init__(self, frame):
+    def __init__(self, frame, mode=TimerMgrMode.Standalone):
         self.frame = frame
 
         # Init values
         self.timer_idx = 0
-        self.mode = TimerMgrMode.Standalone
+        self.mode = mode
         self.timers = [PomoTimer(self, 0), PomoTimer(self, 1)]
 
         # Start timer thread
@@ -262,11 +280,17 @@ class TimerManager():
     def set_timer_idx(self, index):
         self.timer_idx = index
 
+    def set_mode(self, mode):
+        self.mode = mode
+
     def get_timer_data(self):
         return self.timers[self.timer_idx].running_timer_data
 
     def set_timer_data(self, timer_data):
         self.timers[self.timer_idx].set_timer_data(timer_data)
+
+    def set_timer_mode(self, idx, mode):
+        self.timers[idx].set_mode(mode)
 
     def get_timer_state(self, timer_idx):
         return self.timers[timer_idx].get_state()

@@ -15,7 +15,8 @@ import time
 from main_frame import *
 from pomo_timer import *
 from events import *
-from const import *
+from utils import *
+from config import TimerConfig
 
 
 TIMER_EDIT_BOX_EXPAND_X = 30
@@ -78,9 +79,18 @@ class MyMainFrame(MainFrame):
         self.set_frame_icon(icon)
         self.taskbarIcon = FrameTaskBarIcon(self, icon)
 
+        self.config = TimerConfig()
+
         # Init values
-        self.icon_Tn = [self.m_IconT1, self.m_IconT2]
+        self.icon_Tn = [self.m_IconT0, self.m_IconT1]
         self.timer_manager = TimerManager(self)
+        self.timer_manager.set_mode(self.config.timer_mgr_mode)
+        for idx in [0,1]:
+            self.timer_manager.set_timer_mode(idx, self.config.timer_mode[idx])
+            self.timer_manager.timers[idx].set_timer_data(
+                self.config.timer_data[idx]
+            )
+
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
@@ -91,8 +101,8 @@ class MyMainFrame(MainFrame):
         self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
 
         # Font info for icons
-        self.base_font = self.m_IconT2.GetFont()
-        self.bold_font = self.m_IconT1.GetFont()
+        self.base_font = self.m_IconT1.GetFont()
+        self.bold_font = self.m_IconT0.GetFont()
 
         # init view
         self.update_view()
@@ -237,7 +247,7 @@ class MyMainFrame(MainFrame):
         self.set_icon_Tn_font()
         for idx, icon in enumerate(self.icon_Tn):
             timer_state = self.timer_manager.get_timer_state(idx)
-            label = "T{}".format(idx+1)
+            label = "T{}".format(idx)
             if timer_state == TimerState.Stopped or self.showing:
                 icon.SetLabel(label)
             else:
@@ -327,19 +337,23 @@ class MyMainFrame(MainFrame):
     def play_alarm(self):
         if self.play_alarm_times == 0:
             return
-        self.play_sound(u"res/sound/beep0.wav")
+        self.play_sound(self.config.timer_alarm_sound_file)
         self.play_alarm_times = self.play_alarm_times - 1
 
     def show_balloon(self, msg):
-        self.taskbarIcon.ShowBalloon(APP_NAME, msg, 6000, wx.ICON_INFORMATION)
+        self.taskbarIcon.ShowBalloon(
+            APP_NAME, msg,
+            self.config.timer_alarm_duration*1000, wx.ICON_INFORMATION)
 
     def do_alarm(self, timer):
         # set icon, start alarm
         msg = "T{} Timer expired ({}).".format(
-            timer.id+1, timer.timer_data)
-        # self.show_notification(msg)
-        self.show_balloon(msg)
-        self.play_alarm_times = 8
+            timer.id, timer.timer_data)
+        if self.config.timer_alarm_notification:
+            # self.show_notification(msg)
+            self.show_balloon(msg)
+        if self.config.timer_alarm_sound:
+            self.play_alarm_times = self.config.timer_alarm_duration
 
 
 def main():

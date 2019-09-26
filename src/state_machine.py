@@ -1,5 +1,5 @@
 from transitions import Machine, State
-from const import *
+from utils import *
 
 
 class TimerStateMachine(object):
