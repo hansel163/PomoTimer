@@ -3,9 +3,10 @@ from const import *
 
 
 class TimerStateMachine(object):
-    # Define timer states. 
-    states = [State(name='stopped',  on_exit=['on_exit_stopped']), 'running',
-             'paused', 'overflowed','alarmed']
+    # Define timer states.
+    states = [
+        State(name='stopped',  on_exit=['on_exit_stopped']), 'running',
+        'paused', 'overflowed', 'alarmed']
 
     state_dict = {None: TimerState.Invalid,
                   'stopped': TimerState.Stopped,
@@ -25,7 +26,7 @@ class TimerStateMachine(object):
         self.machine.add_transition(
             trigger='on_stop', source='*', dest='stopped',
             before='save_prev_state')
-        
+
         self.machine.add_transition(
             trigger='on_pause', source=['running', 'alarmed'],
             dest='paused', before='save_prev_state')
@@ -38,7 +39,7 @@ class TimerStateMachine(object):
         self.machine.add_transition(
             trigger='on_alarm', source='running',
             dest='alarmed', before='save_prev_state')
-        
+
         self.machine.add_transition(
             trigger='on_start', source='paused',
             dest='alarmed', conditions='prev_is_alarmed',
@@ -55,7 +56,7 @@ class TimerStateMachine(object):
 
     def prev_is_alarmed(self):
         return self.prev_state == 'alarmed'
-    
+
     def prev_is_running(self):
         return self.prev_state == 'running'
 
@@ -77,16 +78,17 @@ class TimerStateMachine(object):
 
     def on_enter_alarmed(self):
         pass
-   
+
     def save_prev_state(self):
         # self.state is created by transitions lib
         self.prev_state = self.state
 
     def get_state(self):
         return TimerStateMachine.state_dict[self.state]
-    
+
     def get_prev_state(self):
         return TimerStateMachine.state_dict[self.prev_state]
+
 
 def test():
     machine = TimerStateMachine()
@@ -96,9 +98,3 @@ def test():
 
 if __name__ == '__main__':
     test()
-
-
-
-
-
-

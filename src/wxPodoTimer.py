@@ -29,6 +29,7 @@ class MainApp(wx.App):
         self.frame.Show(True)
         self.SetTopWindow(self.frame)
         return True
+
     def OnExit(self):
         return super().OnExit()
 
@@ -259,11 +260,11 @@ class MyMainFrame(MainFrame):
         self.update_display()
         self.update_btns()
         self.update_icons()
-    
+
     def update_target(self, value):
         if self.edit_target is None:
             return
-        
+
         self.edit_target.SetLabel("{:0>2d}".format(value))
         self.set_timer_data()
 

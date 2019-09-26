@@ -184,7 +184,7 @@ class PomoTimer():
         if self.timer_data.is_zero():
             self.step = 1   # count up
         else:
-            self.step = -1  # count down        
+            self.step = -1  # count down
 
     def start(self):
         pass
