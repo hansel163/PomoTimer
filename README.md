@@ -7,10 +7,9 @@ A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 - Reset timer when stopped
 - Clear timer
 - Double click to edit
-- 2 cycling timers for working and break
+- 2 alternation timers for working and break
 - Alarm when one timer is run out
-- Show timer on task bar
-- Minimized to system tray
+- Show icon on system tray
 - Max timer: 99:59:59
 - Setting:
    * Set hour/minute/second of each timer
@@ -24,6 +23,9 @@ A simple timer for Pomodoro Technique and eye care with wxPython GUI framework.
 - Multi-language support
 - Pause timer when user is doing presentation
 - Ticking sound when timer is running
+- Mini display mode
+- Show timer data on task bar
+
 - Statistics:
    * Working and break period count
    * Each timer time-out count

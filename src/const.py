@@ -1,6 +1,7 @@
 import enum
 
 
+APP_NAME = 'wxPomoTimer'
 MAX_HOUR = 100
 MAX_MIN_SEC = 60
 

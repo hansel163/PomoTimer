@@ -10,6 +10,7 @@
 #-------------------------------------------------------------------------------
 import os
 import wx
+import wx.adv
 import time
 from main_frame import *
 from pomo_timer import *
@@ -39,10 +40,43 @@ class MyDlgSettings(DlgSettings):
         DlgSettings.__init__(self, parent)
 
 
+class FrameTaskBarIcon(wx.adv.TaskBarIcon):
+    ID_MENU_EXIT = wx.NewId()
+    def __init__(self, frame, icon):
+        wx.adv.TaskBarIcon.__init__(self)
+        self.frame = frame
+        self.SetIcon(wx.Icon(name=icon,
+                             type=wx.BITMAP_TYPE_ICO), APP_NAME)
+        self.Bind(wx.adv.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarLeftDClick)
+        self.Bind(wx.EVT_MENU, self.OnMenuExit, id=self.ID_MENU_EXIT)
+
+    def OnTaskBarLeftDClick(self, event):
+        if self.frame.IsIconized():
+            self.frame.Iconize(False)
+        if not self.frame.IsShown():
+            self.frame.Show(True)
+        self.frame.Raise()
+
+    def OnMenuExit(self, event):
+        self.frame.Close()
+
+    # override
+    def CreatePopupMenu(self):
+        menu = wx.Menu()
+        menu.Append(self.ID_MENU_EXIT, 'Exit')
+        return menu
+
+
 # Implementing MainFrame
 class MyMainFrame(MainFrame):
+    def set_frame_icon(self, icon):
+        self.SetIcon(wx.Icon(icon, wx.BITMAP_TYPE_ICO))
+
     def __init__(self, parent):
         MainFrame.__init__(self, parent)
+        icon = u'res/wxPomoTimer.ico'
+        self.set_frame_icon(icon)
+        self.taskbarIcon = FrameTaskBarIcon(self, icon)
 
         # Init values
         self.icon_Tn = [self.m_IconT1, self.m_IconT2]
@@ -51,6 +85,7 @@ class MyMainFrame(MainFrame):
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
         self.timer_idx = 0
+        self.play_alarm_times = 0
 
         # Connect Events
         self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
@@ -115,13 +150,19 @@ class MyMainFrame(MainFrame):
 
     def OnClose(self, event):
         self.timer_manager.OnExit()
+        self.taskbarIcon.RemoveIcon()
+        self.taskbarIcon.Destroy()
         event.Skip()    # the default event handler does call Destroy()
+
+    def do_secondly(self):
+        self.update_display()
+        self.update_icons()
+        self.play_alarm()
 
     def OnTimerTick(self, event):
         self.timer_manager.OnTimerTick()
-        self.showing = not self.showing
-        self.update_display()
-        self.update_icons()
+        self.showing = not self.showing  # for icon blinking
+        self.do_secondly()
 
     def OnStart(self, event):
         if self.btnStartPauseState == 0:
@@ -268,9 +309,37 @@ class MyMainFrame(MainFrame):
         self.edit_target.SetLabel("{:0>2d}".format(value))
         self.set_timer_data()
 
-    def do_alarm(self, action=True):
+    def show_notification(self, msg):
+        notify = wx.adv.NotificationMessage(
+            title=APP_NAME,
+            message=msg, parent=None, flags=wx.ICON_INFORMATION)
+        notify.Show(timeout=6)  # 1 for short timeout, 100 for long timeout
+
+    def play_sound(self, file):
+        try:
+            sound = wx.adv.Sound(file)
+            sound.Play(wx.adv.SOUND_ASYNC)
+            # save a reference (shoudle no need, but a bug...)
+            self.sound = sound
+        except NotImplementedError as v:
+            wx.MessageBox(str(v), "Exception Message")
+
+    def play_alarm(self):
+        if self.play_alarm_times == 0:
+            return
+        self.play_sound(u"res/sound/beep0.wav")
+        self.play_alarm_times = self.play_alarm_times - 1
+
+    def show_balloon(self, msg):
+        self.taskbarIcon.ShowBalloon(APP_NAME, msg, 6000, wx.ICON_INFORMATION)
+
+    def do_alarm(self, timer):
         # set icon, start alarm
-        pass
+        msg = "T{} Timer expired ({}).".format(
+            timer.id+1, timer.timer_data)
+        # self.show_notification(msg)
+        self.show_balloon(msg)
+        self.play_alarm_times = 8
 
 
 def main():

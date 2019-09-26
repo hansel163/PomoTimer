@@ -168,8 +168,6 @@ class PomoTimer():
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
 
-        self.show_blank = False     # for flashing timer display
-
     def set_timer_data(self, timer_data):
         self.timer_data = timer_data
         self.running_timer_data.copy(self.timer_data)
@@ -292,10 +290,10 @@ class TimerManager():
 
     def timer_expired(self, timer):
         self.frame.update_view()
-        self.frame.do_alarm()
+        self.frame.do_alarm(timer)
 
     def timer_overflow(self, timer):
-        self.frame.update_view()
+        self.frame.update_view(timer)
 
 
 def test():
