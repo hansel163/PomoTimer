@@ -35,12 +35,12 @@ class MainFrame ( wx.Frame ):
 		self.m_IconT2 = wx.StaticText( self, wx.ID_ANY, u"T2", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_IconT2.Wrap( -1 )
 
-		self.m_IconT2.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD, False, "Arial" ) )
+		self.m_IconT2.SetFont( wx.Font( 12, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Arial" ) )
 
 		bSizerIconBar.Add( self.m_IconT2, 0, wx.ALL, 5 )
 
 
-		bSizerIconBar.Add( ( 0, 0), 6, wx.EXPAND, 5 )
+		bSizerIconBar.Add( ( 0, 0), 3, wx.EXPAND, 5 )
 
 		self.m_IconOverflow = wx.StaticText( self, wx.ID_ANY, u"Overflow", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_IconOverflow.Wrap( -1 )
@@ -162,6 +162,8 @@ class MainFrame ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_CLOSE, self.OnClose )
+		self.m_IconT1.Bind( wx.EVT_LEFT_DCLICK, self.OnIconTnLeftDClick )
+		self.m_IconT2.Bind( wx.EVT_LEFT_DCLICK, self.OnIconTnLeftDClick )
 		self.m_spinEditHour.Bind( wx.EVT_KILL_FOCUS, self.OnExitEdit )
 		self.m_spinEditHour.Bind( wx.EVT_SPINCTRL, self.m_spinEditOnSpinCtrl )
 		self.m_spinEditHour.Bind( wx.EVT_TEXT_ENTER, self.OnExitEdit )
@@ -186,6 +188,10 @@ class MainFrame ( wx.Frame ):
 	# Virtual event handlers, overide them in your derived class
 	def OnClose( self, event ):
 		event.Skip()
+
+	def OnIconTnLeftDClick( self, event ):
+		event.Skip()
+
 
 	def OnExitEdit( self, event ):
 		event.Skip()

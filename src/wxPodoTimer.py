@@ -54,6 +54,11 @@ class MyMainFrame(MainFrame):
         # Connect Events
         self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
 
+        # Font info for icons
+        self.base_font = self.m_IconT2.GetFont()
+        self.bold_font = self.m_IconT1.GetFont()
+
+        # init view
         self.update_view()
 
     def SetStartBtn(self, start=True):
@@ -98,6 +103,14 @@ class MyMainFrame(MainFrame):
             return
         self.show_spin_ctrl_edit(
             self.m_staticSecond, self.m_spinEditSecond, (MAX_MIN_SEC - 1))
+
+    def OnIconTnLeftDClick(self, event):
+        icon = event.GetEventObject()
+        icon_idx = self.icon_Tn.index(icon)
+        if icon_idx != self.timer_idx:
+            self.timer_idx = icon_idx
+            self.timer_manager.set_timer_idx(icon_idx)
+            self.update_view()
 
     def OnClose(self, event):
         self.timer_manager.OnExit()
@@ -169,19 +182,28 @@ class MyMainFrame(MainFrame):
         timer_data.second = int(self.m_staticSecond.Label)
         self.timer_manager.set_timer_data(timer_data)
 
+    def set_icon_Tn_font(self):
+        for idx, icon in enumerate(self.icon_Tn):
+            if idx == self.timer_idx:
+                icon.SetFont(self.bold_font)
+            else:
+                icon.SetFont(self.base_font)
+
     def update_icons(self):
         state = self.timer_manager.get_current_timer_state()
         prev_state = self.timer_manager.get_current_timer_prev_state()
-        if state == TimerState.Stopped:
-            for icon in self.icon_Tn:
+        self.set_icon_Tn_font()
+        for idx, icon in enumerate(self.icon_Tn):
+            timer_state = self.timer_manager.get_timer_state(idx)
+            if timer_state == TimerState.Stopped:
                 icon.Show()
+            else:
+                icon.Show(self.showing)
+
+        if state == TimerState.Stopped or state == TimerState.Running:
             self.m_IconOverflow.Hide()
             self.m_IconAlarm.Hide()
         elif state == TimerState.Paused or state == TimerState.Overflowed:
-            for icon in self.icon_Tn:
-                icon.Show()
-            self.icon_Tn[self.timer_idx].Show(self.showing)
-
             if state == TimerState.Overflowed:
                 self.m_IconOverflow.Show()
             else:
@@ -191,16 +213,7 @@ class MyMainFrame(MainFrame):
                 self.m_IconAlarm.Show(self.showing)
             else:
                 self.m_IconAlarm.Hide()
-        elif state == TimerState.Running:
-            for icon in self.icon_Tn:
-                icon.Show()
-            self.icon_Tn[self.timer_idx].Show(self.showing)
-            self.m_IconOverflow.Hide()
-            self.m_IconAlarm.Hide()
         elif state == TimerState.Alarmed:
-            for icon in self.icon_Tn:
-                icon.Show()
-            self.icon_Tn[self.timer_idx].Show(self.showing)
             self.m_IconOverflow.Hide()
             self.m_IconAlarm.Show(self.showing)
 
