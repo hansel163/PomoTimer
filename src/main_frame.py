@@ -242,7 +242,7 @@ class MainFrame ( wx.Frame ):
 class DlgSettings ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,416 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,427 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -328,12 +328,9 @@ class DlgSettings ( wx.Dialog ):
 		self.m_staticSoundFile = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Sound File Path", wx.DefaultPosition, wx.DefaultSize, wx.ST_ELLIPSIZE_MIDDLE )
 		self.m_staticSoundFile.Wrap( -1 )
 
-		bSizerSound.Add( self.m_staticSoundFile, 0, wx.ALL, 5 )
+		bSizerSound.Add( self.m_staticSoundFile, 2, wx.ALL, 5 )
 
-
-		bSizerSound.Add( ( 0, 0), 1, wx.EXPAND, 5 )
-
-		self.m_btnSelSound = wx.Button( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"...", wx.DefaultPosition, wx.Size( 20,20 ), wx.BU_BOTTOM )
+		self.m_btnSelSound = wx.Button( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"...", wx.DefaultPosition, wx.Size( 25,25 ), wx.BU_BOTTOM )
 		bSizerSound.Add( self.m_btnSelSound, 0, wx.ALL, 5 )
 
 
@@ -350,9 +347,8 @@ class DlgSettings ( wx.Dialog ):
 
 		bSizerDuration.Add( self.m_staticDuration, 0, wx.ALL, 5 )
 
-		self.m_textDuration = wx.TextCtrl( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"8", wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_textDuration.SetMaxLength( 1 )
-		bSizerDuration.Add( self.m_textDuration, 0, wx.ALL, 5 )
+		self.m_spinDuration = wx.SpinCtrl( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 1, 60, 8 )
+		bSizerDuration.Add( self.m_spinDuration, 0, wx.ALL, 5 )
 
 		self.m_staticText21 = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Second(s)", wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText21.Wrap( -1 )
@@ -390,7 +386,23 @@ class DlgSettings ( wx.Dialog ):
 
 		self.Centre( wx.BOTH )
 
+		# Connect Events
+		self.m_TimerMgrMode.Bind( wx.EVT_RADIOBOX, self.m_TimerMgrModeOnRadioBox )
+		self.m_btnSelSound.Bind( wx.EVT_BUTTON, self.m_btnSelSoundOnButtonClick )
+		self.m_btnOK.Bind( wx.EVT_BUTTON, self.m_btnOKOnButtonClick )
+
 	def __del__( self ):
 		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def m_TimerMgrModeOnRadioBox( self, event ):
+		event.Skip()
+
+	def m_btnSelSoundOnButtonClick( self, event ):
+		event.Skip()
+
+	def m_btnOKOnButtonClick( self, event ):
+		event.Skip()
 
 

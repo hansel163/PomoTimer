@@ -16,7 +16,8 @@ from main_frame import *
 from pomo_timer import *
 from events import *
 from utils import *
-from config import TimerConfig
+from timer_config import TimerConfig
+from dlg_settings import MyDlgSettings
 
 
 TIMER_EDIT_BOX_EXPAND_X = 30
@@ -34,11 +35,6 @@ class MainApp(wx.App):
 
     def OnExit(self):
         return super().OnExit()
-
-
-class MyDlgSettings(DlgSettings):
-    def __init__(self, parent):
-        DlgSettings.__init__(self, parent)
 
 
 class FrameTaskBarIcon(wx.adv.TaskBarIcon):
@@ -190,14 +186,14 @@ class MyMainFrame(MainFrame):
         self.update_view()
 
     def OnSet(self, event):
-        dialog = MyDlgSettings(self)
+        dialog = MyDlgSettings(self, self.config)
         result = dialog.ShowModal()
         if result == wx.ID_OK:
-            pass
+            self.config.copy(dialog.timer_config)
+            self.update_view()
         else:
             pass
         dialog.Destroy()
-        self.update_view()
 
     def OnExitEdit(self, event):
         if self.edit_target is None:
