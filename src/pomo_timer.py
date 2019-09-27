@@ -280,10 +280,13 @@ class TimerManager():
     def set_timer_idx(self, index):
         self.timer_idx = index
 
+    def get_timer_idx(self):
+        return self.timer_idx
+
     def set_mode(self, mode):
         self.mode = mode
 
-    def get_timer_data(self):
+    def get_running_timer_data(self):
         return self.timers[self.timer_idx].running_timer_data
 
     def set_timer_data(self, timer_data):

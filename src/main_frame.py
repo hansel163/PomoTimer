@@ -242,7 +242,7 @@ class MainFrame ( wx.Frame ):
 class DlgSettings ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,427 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,478 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -251,7 +251,7 @@ class DlgSettings ( wx.Dialog ):
 		m_TimerMgrModeChoices = [ u"Standalone", u"Alternation" ]
 		self.m_TimerMgrMode = wx.RadioBox( self, wx.ID_ANY, u"Mode", wx.DefaultPosition, wx.DefaultSize, m_TimerMgrModeChoices, 1, wx.RA_SPECIFY_ROWS )
 		self.m_TimerMgrMode.SetSelection( 0 )
-		bSizerDlgMain.Add( self.m_TimerMgrMode, 0, wx.ALL, 5 )
+		bSizerDlgMain.Add( self.m_TimerMgrMode, 0, wx.ALL|wx.EXPAND, 5 )
 
 		sbSizerTimer0 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer0" ), wx.VERTICAL )
 
@@ -340,6 +340,10 @@ class DlgSettings ( wx.Dialog ):
 		self.m_chkAlarmNotification.SetValue(True)
 		sbSizerAlarm.Add( self.m_chkAlarmNotification, 0, wx.ALL, 5 )
 
+		self.m_chkAlarmBlinkIcon = wx.CheckBox( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Blink Taskbar Icon", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_chkAlarmBlinkIcon.SetValue(True)
+		sbSizerAlarm.Add( self.m_chkAlarmBlinkIcon, 0, wx.ALL, 5 )
+
 		bSizerDuration = wx.BoxSizer( wx.HORIZONTAL )
 
 		self.m_staticDuration = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Duration:", wx.DefaultPosition, wx.DefaultSize, 0 )
@@ -371,6 +375,9 @@ class DlgSettings ( wx.Dialog ):
 		self.m_btnOK.SetDefault()
 		bSizerButton.Add( self.m_btnOK, 0, wx.ALL, 5 )
 
+		self.m_btnReset = wx.Button( self, wx.ID_ANY, u"&Reset", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizerButton.Add( self.m_btnReset, 0, wx.ALL, 5 )
+
 		self.m_btnCancel = wx.Button( self, wx.ID_CANCEL, u"&Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
 		bSizerButton.Add( self.m_btnCancel, 0, wx.ALL, 5 )
 
@@ -390,6 +397,7 @@ class DlgSettings ( wx.Dialog ):
 		self.m_TimerMgrMode.Bind( wx.EVT_RADIOBOX, self.m_TimerMgrModeOnRadioBox )
 		self.m_btnSelSound.Bind( wx.EVT_BUTTON, self.m_btnSelSoundOnButtonClick )
 		self.m_btnOK.Bind( wx.EVT_BUTTON, self.m_btnOKOnButtonClick )
+		self.m_btnReset.Bind( wx.EVT_BUTTON, self.m_btnResetOnButtonClick )
 
 	def __del__( self ):
 		pass
@@ -403,6 +411,9 @@ class DlgSettings ( wx.Dialog ):
 		event.Skip()
 
 	def m_btnOKOnButtonClick( self, event ):
+		event.Skip()
+
+	def m_btnResetOnButtonClick( self, event ):
 		event.Skip()
 
 

@@ -39,13 +39,35 @@ class MainApp(wx.App):
 
 class FrameTaskBarIcon(wx.adv.TaskBarIcon):
     ID_MENU_EXIT = wx.NewId()
-    def __init__(self, frame, icon):
+    ID_MENU_SETTINGS = wx.NewId()
+
+    def __init__(self, frame, icon=APP_ICON):
         wx.adv.TaskBarIcon.__init__(self)
         self.frame = frame
+        self.icon = icon
         self.SetIcon(wx.Icon(name=icon,
                              type=wx.BITMAP_TYPE_ICO), APP_NAME)
         self.Bind(wx.adv.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarLeftDClick)
         self.Bind(wx.EVT_MENU, self.OnMenuExit, id=self.ID_MENU_EXIT)
+        self.Bind(wx.EVT_MENU, self.OnMenuSettings, id=self.ID_MENU_SETTINGS)
+
+    def update_taskbar_icon(self, icon, tooltip):
+        if self.IsOk():
+            self.SetIcon(wx.Icon(name=icon,
+                         type=wx.BITMAP_TYPE_ICO), tooltip)
+
+    def update(self):
+        state = self.frame.timer_manager.get_current_timer_state()
+        timer_data = self.frame.timer_manager.get_running_timer_data()
+        tooltip = \
+            "{}:\n{}\n{}".format(APP_NAME, state.name, timer_data.get_str())
+        if state == TimerState.Alarmed \
+                and self.frame.config.timer_alarm_blink_icon \
+                and not self.frame.showing:
+            icon = APP_BLANK_ICON
+        else:
+            icon = self.icon
+        self.update_taskbar_icon(icon, tooltip)
 
     def OnTaskBarLeftDClick(self, event):
         if self.frame.IsIconized():
@@ -54,13 +76,17 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
             self.frame.Show(True)
         self.frame.Raise()
 
+    def OnMenuSettings(self, event):
+        self.frame.show_settings()
+
     def OnMenuExit(self, event):
         self.frame.Close()
 
     # override
     def CreatePopupMenu(self):
         menu = wx.Menu()
-        menu.Append(self.ID_MENU_EXIT, 'Exit')
+        menu.Append(self.ID_MENU_SETTINGS, '&Settings')
+        menu.Append(self.ID_MENU_EXIT, '&Exit')
         return menu
 
 
@@ -69,9 +95,17 @@ class MyMainFrame(MainFrame):
     def set_frame_icon(self, icon):
         self.SetIcon(wx.Icon(icon, wx.BITMAP_TYPE_ICO))
 
+    def apply_config(self):
+        self.timer_manager.set_mode(self.config.timer_mgr_mode)
+        for idx in [0, 1]:
+            self.timer_manager.set_timer_mode(idx, self.config.timer_mode[idx])
+            self.timer_manager.timers[idx].set_timer_data(
+                self.config.timer_data[idx]
+            )
+
     def __init__(self, parent):
         MainFrame.__init__(self, parent)
-        icon = u'res/wxPomoTimer.ico'
+        icon = APP_ICON
         self.set_frame_icon(icon)
         self.taskbarIcon = FrameTaskBarIcon(self, icon)
 
@@ -80,12 +114,6 @@ class MyMainFrame(MainFrame):
         # Init values
         self.icon_Tn = [self.m_IconT0, self.m_IconT1]
         self.timer_manager = TimerManager(self)
-        self.timer_manager.set_mode(self.config.timer_mgr_mode)
-        for idx in [0,1]:
-            self.timer_manager.set_timer_mode(idx, self.config.timer_mode[idx])
-            self.timer_manager.timers[idx].set_timer_data(
-                self.config.timer_data[idx]
-            )
 
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
@@ -101,6 +129,7 @@ class MyMainFrame(MainFrame):
         self.bold_font = self.m_IconT0.GetFont()
 
         # init view
+        self.apply_config()
         self.update_view()
 
     def SetStartBtn(self, start=True):
@@ -164,6 +193,7 @@ class MyMainFrame(MainFrame):
         self.update_display()
         self.update_icons()
         self.play_alarm()
+        self.taskbarIcon.update()
 
     def OnTimerTick(self, event):
         self.timer_manager.OnTimerTick()
@@ -185,15 +215,20 @@ class MyMainFrame(MainFrame):
         self.timer_manager.OnClear()
         self.update_view()
 
-    def OnSet(self, event):
+    def show_settings(self):
         dialog = MyDlgSettings(self, self.config)
         result = dialog.ShowModal()
         if result == wx.ID_OK:
             self.config.copy(dialog.timer_config)
+            self.config.save_config()
+            self.apply_config()
             self.update_view()
         else:
             pass
         dialog.Destroy()
+
+    def OnSet(self, event):
+        self.show_settings()
 
     def OnExitEdit(self, event):
         if self.edit_target is None:
@@ -201,7 +236,8 @@ class MyMainFrame(MainFrame):
 
         sender = event.GetEventObject()
         sender.Hide()
-        self.edit_target.Show()
+        if self.edit_target:
+            self.edit_target.Show()
         self.bSizerTimer.Layout()
         self.update_target(sender.Value)
         self.edit_target = None
@@ -217,7 +253,7 @@ class MyMainFrame(MainFrame):
         self.m_staticSecond.SetLabel("")
 
     def show_timer_data(self):
-        timer_data = self.timer_manager.get_timer_data()
+        timer_data = self.timer_manager.get_running_timer_data()
 
         self.m_staticHour.SetLabel("{:0>2d}".format(timer_data.hour))
         self.m_staticMinute.SetLabel("{:0>2d}".format(timer_data.minute))
@@ -229,6 +265,7 @@ class MyMainFrame(MainFrame):
         timer_data.minute = int(self.m_staticMinute.Label)
         timer_data.second = int(self.m_staticSecond.Label)
         self.timer_manager.set_timer_data(timer_data)
+        self.config.timer_data[self.timer_idx].copy(timer_data)
 
     def set_icon_Tn_font(self):
         for idx, icon in enumerate(self.icon_Tn):
@@ -301,12 +338,13 @@ class MyMainFrame(MainFrame):
         if state == TimerState.Paused:
             self.display_timer(show=self.showing)
         else:
-            self.display_timer()        
+            self.display_timer()
 
     def update_view(self):
         self.update_display()
         self.update_btns()
         self.update_icons()
+        self.taskbarIcon.update()
 
     def update_target(self, value):
         if self.edit_target is None:

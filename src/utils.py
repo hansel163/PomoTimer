@@ -3,6 +3,9 @@ import os
 
 
 APP_NAME = 'wxPomoTimer'
+APP_ICON = u'res/wxPomoTimer.ico'
+APP_BLANK_ICON = u'res/blank.ico'
+
 MAX_HOUR = 100
 MAX_MIN_SEC = 60
 
