@@ -12,7 +12,7 @@ import threading
 import wx
 import time
 from events import *
-from utils import *
+from common import *
 from state_machine import TimerStateMachine
 
 
@@ -185,6 +185,19 @@ class PomoTimer():
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
 
+    def start(self):
+        self.state_machine.on_start()
+
+    def stop(self):
+        self.state_machine.on_stop()
+
+    def pause(self):
+        self.state_machine.on_pause()
+
+    def restart(self):
+        self.stop()
+        self.start()
+
     def set_timer_data(self, timer_data):
         self.timer_data = timer_data
         self.running_timer_data.copy(self.timer_data)
@@ -204,15 +217,6 @@ class PomoTimer():
         else:
             self.step = -1  # count down
 
-    def start(self):
-        pass
-
-    def pause(self):
-        pass
-
-    def stop(self):
-        pass
-
     def restore_timer(self):
         # restore original timer data
         self.running_timer_data.copy(self.timer_data)
@@ -221,24 +225,15 @@ class PomoTimer():
         self.timer_data.clear()
         self.running_timer_data.clear()
 
-    def timer_expired(self):
-        self.step = 1   # do count-up
-        self.state_machine.on_alarm()
-        self.manager.timer_expired(self)
-
-    def timer_overflow(self):
-        self.state_machine.on_overflow()
-        self.manager.timer_overflow(self)
-
     def tick(self):
-        state = self.state_machine.get_state()
+        state = self.get_state()
         if state == TimerState.Running or state == TimerState.Alarmed:
             self.running_timer_data.step(self.step)
             # count-down timer is 0:0:0
             if self.running_timer_data.is_zero():
-                self.timer_expired()
+                self.state_machine.on_alarm()
             elif self.running_timer_data.is_max():
-                self.timer_overflow()
+                self.state_machine.on_overflow()
 
 
 class TimerManager():
@@ -248,7 +243,9 @@ class TimerManager():
         # Init values
         self.timer_idx = 0
         self.mode = mode
-        self.timers = [PomoTimer(self, 0), PomoTimer(self, 1)]
+        self.timers = []
+        for i in range(TIMER_NUM):
+            self.timers.append(PomoTimer(self, i))
 
         # Start timer thread
         self.timer_thread = TimerThread(frame)
@@ -262,13 +259,13 @@ class TimerManager():
         if not self.timer_thread.running:
             self.timer_thread.go()
 
-        self.timers[self.timer_idx].state_machine.on_start()
+        self.timers[self.timer_idx].start()
 
     def OnPause(self):
-        self.timers[self.timer_idx].state_machine.on_pause()
+        self.timers[self.timer_idx].pause()
 
     def OnStop(self):
-        self.timers[self.timer_idx].state_machine.on_stop()
+        self.timers[self.timer_idx].stop()
 
     def OnClear(self):
         if self.timers[self.timer_idx].get_state() == TimerState.Stopped:
@@ -279,23 +276,26 @@ class TimerManager():
             self.timer_thread.exit()
             self.timer_thread.join()
 
-    def set_timer_idx(self, index):
-        self.timer_idx = index
+    def set_current_timer_idx(self, idx):
+        if idx < TIMER_NUM:
+            self.timer_idx = idx
 
-    def get_timer_idx(self):
+    def get_current_timer_idx(self):
         return self.timer_idx
 
+    def get_timer(self, idx):
+        return self.timers[idx]
+
+    def get_current_timer(self):
+        return self.get_timer(self.timer_idx)
+
     def set_mode(self, mode):
-        self.mode = mode
-
-    def get_running_timer_data(self):
-        return self.timers[self.timer_idx].running_timer_data
-
-    def set_timer_data(self, timer_data):
-        self.timers[self.timer_idx].set_timer_data(timer_data)
+        if isinstance(mode, TimerMgrMode):
+            self.mode = mode
 
     def set_timer_mode(self, idx, mode):
-        self.timers[idx].set_mode(mode)
+        if isinstance(mode, TimerMode):
+            self.timers[idx].set_mode(mode)
 
     def get_timer_state(self, timer_idx):
         return self.timers[timer_idx].get_state()
@@ -317,12 +317,26 @@ class TimerManager():
         else:
             return WorkMode.OneShot
 
+    def get_next_timer_id(self, current_id):
+        next_id = current_id + 1
+        next_id = next_id if next_id < TIMER_NUM else 0
+        return next_id
+
+    def alternate_timer(self, current_id):
+        next_id = self.get_next_timer_id(current_id)
+
     def timer_expired(self, timer):
-        self.frame.update_view()
         self.frame.do_alarm(timer)
+        if self.mode == TimerMgrMode.Alternation:
+            self.alternate_timer(timer.id)
 
     def timer_overflow(self, timer):
-        self.frame.update_view(timer)
+        pass
+
+    def on_timer_state_changed(self, timer):
+        # update UI if current timer state changed
+        if timer.id == self.timer_idx:
+            self.frame.update_view()
 
 
 def test():

@@ -1,5 +1,5 @@
 from transitions import Machine, State
-from utils import *
+from common import *
 
 
 class TimerStateMachine(object):
@@ -22,7 +22,8 @@ class TimerStateMachine(object):
         self.prev_state = None
         self.machine = Machine(
             model=self, states=TimerStateMachine.states,
-            initial='stopped')
+            initial='stopped', name='TimerFSM',
+            after_state_change='on_after_state_change')
         self.machine.add_transition(
             trigger='on_stop', source='*', dest='stopped',
             before='save_prev_state')
@@ -54,6 +55,9 @@ class TimerStateMachine(object):
             trigger='on_start', source='stopped', dest='running',
             before='save_prev_state')
 
+    def on_after_state_change(self):
+        self.timer.manager.on_timer_state_changed(self.timer)
+
     def prev_is_alarmed(self):
         return self.prev_state == 'alarmed'
 
@@ -64,20 +68,23 @@ class TimerStateMachine(object):
         self.timer.calc_step()
 
     def on_enter_stopped(self):
-        self.timer.stop()
         self.timer.restore_timer()
 
     def on_enter_running(self):
-        self.timer.start()
+        pass
 
     def on_enter_paused(self):
-        self.timer.pause()
+        pass
 
     def on_enter_overflowed(self):
-        self.timer.stop()
+        self.timer.manager.timer_overflow(self.timer)
 
     def on_enter_alarmed(self):
-        pass
+        self.timer.manager.timer_expired(self.timer)
+        if self.timer.mode == TimerMode.Cycling:
+            self.timer.restart()
+        else:
+            self.timer.step = 1  # do count-up
 
     def save_prev_state(self):
         # self.state is created by transitions lib

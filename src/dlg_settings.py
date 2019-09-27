@@ -2,7 +2,7 @@ import os
 import wx
 from main_frame import DlgSettings
 from timer_config import TimerConfig
-from utils import TimerMode, TimerMgrMode
+from common import TimerMode, TimerMgrMode, TIMER_NUM
 
 file_wildcard = "Wave Files (.wav)|*.wav|All Files|*.*"
 
@@ -12,7 +12,7 @@ class MyDlgSettings(DlgSettings):
         self.m_TimerMgrMode.SetSelection(
             self.timer_config.timer_mgr_mode.value
         )
-        for idx in [0, 1]:
+        for idx in range(TIMER_NUM):
             self.m_textTimerNames[idx].SetValue(
                 self.timer_config.timer_name[idx]
             )
@@ -88,7 +88,7 @@ class MyDlgSettings(DlgSettings):
     def m_btnOKOnButtonClick(self, event):
         selection = self.m_TimerMgrMode.GetSelection()
         self.timer_config.timer_mgr_mode = TimerMgrMode(selection)
-        for idx in [0, 1]:
+        for idx in range(TIMER_NUM):
             self.timer_config.timer_data[idx].set(
                 int(self.m_spinHours[idx].GetValue()),
                 int(self.m_spinMinutes[idx].GetValue()),

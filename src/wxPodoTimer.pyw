@@ -15,8 +15,8 @@ import time
 from main_frame import *
 from pomo_timer import *
 from events import *
-from utils import *
-from timer_config import TimerConfig
+from common import *
+from timer_config import TimerConfig, TIMER_NUM
 from dlg_settings import MyDlgSettings
 
 
@@ -58,7 +58,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
 
     def update(self):
         tooltip = "{}".format(APP_NAME)
-        for idx in [0, 1]:
+        for idx in range(TIMER_NUM):
             timer = self.frame.timer_manager.timers[idx]
             tooltip = tooltip + \
                 "\nT{} ({}): {}\n  {}".format(
@@ -103,12 +103,11 @@ class MyMainFrame(MainFrame):
 
     def apply_config(self):
         self.timer_manager.set_mode(self.config.timer_mgr_mode)
-        for idx in [0, 1]:
+        for idx in range(TIMER_NUM):
+            timer = self.timer_manager.get_timer(idx)
             self.timer_manager.set_timer_mode(idx, self.config.timer_mode[idx])
-            self.timer_manager.timers[idx].set_timer_data(
-                self.config.timer_data[idx]
-            )
-            self.timer_manager.timers[idx].name = self.config.timer_name[idx]
+            timer.set_timer_data(self.config.timer_data[idx])
+            timer.name = self.config.timer_name[idx]
 
     def __init__(self, parent):
         MainFrame.__init__(self, parent)
@@ -125,7 +124,7 @@ class MyMainFrame(MainFrame):
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
-        self.timer_idx = 0
+        self.blank_display = False  # is blank display?
         self.play_alarm_times = 0
 
         # Connect Events
@@ -183,11 +182,13 @@ class MyMainFrame(MainFrame):
             self.m_staticSecond, self.m_spinEditSecond, (MAX_MIN_SEC - 1))
 
     def OnIconTnLeftDClick(self, event):
+        # not allow switching timer under alternation mode
+        if self.timer_manager.mode == TimerMgrMode.Alternation:
+            return
         icon = event.GetEventObject()
         icon_idx = self.icon_Tn.index(icon)
-        if icon_idx != self.timer_idx:
-            self.timer_idx = icon_idx
-            self.timer_manager.set_timer_idx(icon_idx)
+        if icon_idx != self.timer_manager.timer_idx:
+            self.timer_manager.set_current_timer_idx(icon_idx)
             self.update_view()
 
     def OnClose(self, event):
@@ -212,15 +213,12 @@ class MyMainFrame(MainFrame):
             self.timer_manager.OnStart()
         else:
             self.timer_manager.OnPause()
-        self.update_view()
 
     def OnStop(self, event):
         self.timer_manager.OnStop()
-        self.update_view()
 
     def OnClear(self, event):
         self.timer_manager.OnClear()
-        self.update_view()
 
     def show_settings(self):
         dialog = MyDlgSettings(self, self.config)
@@ -260,7 +258,8 @@ class MyMainFrame(MainFrame):
         self.m_staticSecond.SetLabel("")
 
     def show_timer_data(self):
-        timer_data = self.timer_manager.get_running_timer_data()
+        timer = self.timer_manager.get_current_timer()
+        timer_data = timer.running_timer_data
 
         self.m_staticHour.SetLabel("{:0>2d}".format(timer_data.hour))
         self.m_staticMinute.SetLabel("{:0>2d}".format(timer_data.minute))
@@ -271,12 +270,12 @@ class MyMainFrame(MainFrame):
         timer_data.hour = int(self.m_staticHour.Label)
         timer_data.minute = int(self.m_staticMinute.Label)
         timer_data.second = int(self.m_staticSecond.Label)
-        self.timer_manager.set_timer_data(timer_data)
-        self.config.timer_data[self.timer_idx].copy(timer_data)
+        self.timer_manager.get_current_timer().set_timer_data(timer_data)
+        self.config.timer_data[self.timer_manager.timer_idx].copy(timer_data)
 
     def set_icon_Tn_font(self):
         for idx, icon in enumerate(self.icon_Tn):
-            if idx == self.timer_idx:
+            if idx == self.timer_manager.timer_idx:
                 icon.SetFont(self.bold_font)
             else:
                 icon.SetFont(self.base_font)
@@ -337,15 +336,19 @@ class MyMainFrame(MainFrame):
     def display_timer(self, show=True):
         if show:
             self.show_timer_data()
+            self.blank_display = False
         else:
             self.show_blank_timer()
+            self.blank_display = True
 
     def update_display(self):
         state = self.timer_manager.get_current_timer_state()
         if state == TimerState.Paused:
             self.display_timer(show=self.showing)
-        else:
-            self.display_timer()
+        elif state == TimerState.Running  \
+                or state == TimerState.Alarmed  \
+                or self.blank_display:
+                    self.display_timer()
 
     def update_view(self):
         self.update_display()

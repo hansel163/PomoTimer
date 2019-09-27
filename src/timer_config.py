@@ -1,6 +1,7 @@
 import configparser
-from utils import *
+from common import *
 from pomo_timer import TimerData
+
 
 CONFIG_FILE = 'wxPomoTimer.cfg'
 # ------------------------------------
@@ -19,22 +20,27 @@ ALARM_NOTIFICATION = 'notification'
 ALARM_BLINK_ICON = 'blink_icon'
 ALARM_DURATION = 'duration'
 # ------------------------------------
-DEFAULT_ALAMR_SOUND_FILE = u"res\\sound\\beep0.wav"
+DFT_TIMER_MGR_MODE = TimerMgrMode.Standalone
+DFT_TIMER_NAME = ['Working', 'Break']
+DFT_TIMER_MODE = [TimerMode.OneShot, TimerMode.OneShot]
+DFT_TIMER_DATA = [TimerData(0, 25, 0), TimerData(0, 5, 0)]
+DFT_ALARM_SOUND = True
+DFT_ALAMR_SOUND_FILE = u"res\\sound\\beep0.wav"
+DFT_ALARM_NOTIFICATION = False
+DFT_ALARM_BLINK_ICON = True
 DEFAULT_ALARM_DURATION = 8
-DEFAULT_TIMER0_NAME = 'Working'
-DEFAULT_TIMER1_NAME = 'Break'
 
 
 class TimerConfig(object):
     def reset(self):
-        self.timer_mgr_mode = TimerMgrMode.Standalone
-        self.timer_mode = [TimerMode.OneShot, TimerMode.OneShot]
-        self.timer_data = [TimerData(0, 25, 0), TimerData(0, 5, 0)]
-        self.timer_name = [DEFAULT_TIMER0_NAME, DEFAULT_TIMER1_NAME]
-        self.timer_alarm_sound = True
-        self.timer_alarm_sound_file = DEFAULT_ALAMR_SOUND_FILE
-        self.timer_alarm_notification = True
-        self.timer_alarm_blink_icon = True
+        self.timer_mgr_mode = DFT_TIMER_MGR_MODE
+        self.timer_mode = DFT_TIMER_MODE
+        self.timer_data = DFT_TIMER_DATA
+        self.timer_name = DFT_TIMER_NAME
+        self.timer_alarm_sound = DFT_ALARM_SOUND
+        self.timer_alarm_sound_file = DFT_ALAMR_SOUND_FILE
+        self.timer_alarm_notification = DFT_ALARM_NOTIFICATION
+        self.timer_alarm_blink_icon = DFT_ALARM_BLINK_ICON
         self.timer_alarm_duration = DEFAULT_ALARM_DURATION
 
     def __init__(self, cfg_file=CONFIG_FILE):
@@ -67,33 +73,32 @@ class TimerConfig(object):
             self.timer_mgr_mode = TimerMgrMode[config.get(
                 SECTION_TIMER_MGR,
                 TIMER_MGR_MODE,
-                fallback='Standalone')]
-            for i in [0, 1]:
+                fallback=DFT_TIMER_MGR_MODE.name)]
+            for i in range(TIMER_NUM):
                 section = SECTION_TIMER_PREFIX + str(i)
                 self.timer_name[i] = config.get(
                     section, TIMER_NAME,
-                    fallback=DEFAULT_TIMER0_NAME if i == 0 else
-                    DEFAULT_TIMER1_NAME
+                    fallback=DFT_TIMER_NAME[i]
                 )
                 self.timer_mode[i] = TimerMode[config.get(
-                    section, TIMER_MODE, fallback='OneShot')]
+                    section, TIMER_MODE, fallback=DFT_TIMER_MODE.name)]
                 self.timer_data[i].set_from_string(config.get(
-                    section, TIMER_DATA, fallback='00:25:00' if i == 0 else
-                    '00:05:00')
+                    section, TIMER_DATA,
+                    fallback=DFT_TIMER_DATA[i])
                 )
 
             self.timer_alarm_sound = config.getboolean(
                 SECTION_ALARM,
-                ALARM_SOUND, fallback=True)
+                ALARM_SOUND, fallback=DFT_ALARM_SOUND)
             self.timer_alarm_sound_file = config.get(
                 SECTION_ALARM,
-                ALARM_SOUND_FILE, fallback=DEFAULT_ALAMR_SOUND_FILE)
+                ALARM_SOUND_FILE, fallback=DFT_ALAMR_SOUND_FILE)
             self.timer_alarm_notification = config.getboolean(
                 SECTION_ALARM,
-                ALARM_NOTIFICATION, fallback=True)
+                ALARM_NOTIFICATION, fallback=DFT_ALARM_NOTIFICATION)
             self.timer_alarm_blink_icon = config.getboolean(
                 SECTION_ALARM,
-                ALARM_BLINK_ICON, fallback=True)
+                ALARM_BLINK_ICON, fallback=DFT_ALARM_BLINK_ICON)
             self.timer_alarm_duration = config.getint(
                 SECTION_ALARM,
                 ALARM_DURATION, fallback=DEFAULT_ALARM_DURATION)
