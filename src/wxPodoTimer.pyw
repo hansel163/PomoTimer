@@ -57,10 +57,16 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
                          type=wx.BITMAP_TYPE_ICO), tooltip)
 
     def update(self):
+        tooltip = "{}".format(APP_NAME)
+        for idx in [0, 1]:
+            timer = self.frame.timer_manager.timers[idx]
+            tooltip = tooltip + \
+                "\nT{} ({}): {}\n  {}".format(
+                    idx, timer.name, timer.get_state().name,
+                    timer.running_timer_data.get_str()
+                )
+
         state = self.frame.timer_manager.get_current_timer_state()
-        timer_data = self.frame.timer_manager.get_running_timer_data()
-        tooltip = \
-            "{}:\n{}\n{}".format(APP_NAME, state.name, timer_data.get_str())
         if state == TimerState.Alarmed \
                 and self.frame.config.timer_alarm_blink_icon \
                 and not self.frame.showing:
@@ -102,6 +108,7 @@ class MyMainFrame(MainFrame):
             self.timer_manager.timers[idx].set_timer_data(
                 self.config.timer_data[idx]
             )
+            self.timer_manager.timers[idx].name = self.config.timer_name[idx]
 
     def __init__(self, parent):
         MainFrame.__init__(self, parent)
@@ -381,8 +388,8 @@ class MyMainFrame(MainFrame):
 
     def do_alarm(self, timer):
         # set icon, start alarm
-        msg = "T{} Timer expired ({}).".format(
-            timer.id, timer.timer_data)
+        msg = "T{} ({}) Timer expired ({}).".format(
+            timer.id, timer.name, timer.timer_data)
         if self.config.timer_alarm_notification:
             # self.show_notification(msg)
             self.show_balloon(msg)

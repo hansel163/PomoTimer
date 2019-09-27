@@ -169,13 +169,15 @@ class TimerThread(threading.Thread):
 
 
 class PomoTimer():
-    def __init__(self, manager, id, timer_data=None, mode=TimerMode.OneShot):
+    def __init__(self, manager, id, name="",
+                 timer_data=None, mode=TimerMode.OneShot):
         if timer_data is None:
             self.timer_data = TimerData()
         else:
             self.timer_data = timer_data
         self.manager = manager
         self.id = id
+        self.name = name
 
         self.step = 1
         self.mode = mode

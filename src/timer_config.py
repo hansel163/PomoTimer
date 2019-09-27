@@ -8,6 +8,7 @@ SECTION_TIMER_MGR = 'TimerManager'
 TIMER_MGR_MODE = 'mode'
 # ------------------------------------
 SECTION_TIMER_PREFIX = 'Timer'
+TIMER_NAME = 'name'
 TIMER_MODE = 'mode'
 TIMER_DATA = 'data'
 # ------------------------------------
@@ -20,6 +21,8 @@ ALARM_DURATION = 'duration'
 # ------------------------------------
 DEFAULT_ALAMR_SOUND_FILE = u"res\\sound\\beep0.wav"
 DEFAULT_ALARM_DURATION = 8
+DEFAULT_TIMER0_NAME = 'Working'
+DEFAULT_TIMER1_NAME = 'Break'
 
 
 class TimerConfig(object):
@@ -27,6 +30,7 @@ class TimerConfig(object):
         self.timer_mgr_mode = TimerMgrMode.Standalone
         self.timer_mode = [TimerMode.OneShot, TimerMode.OneShot]
         self.timer_data = [TimerData(0, 25, 0), TimerData(0, 5, 0)]
+        self.timer_name = [DEFAULT_TIMER0_NAME, DEFAULT_TIMER1_NAME]
         self.timer_alarm_sound = True
         self.timer_alarm_sound_file = DEFAULT_ALAMR_SOUND_FILE
         self.timer_alarm_notification = True
@@ -44,6 +48,7 @@ class TimerConfig(object):
     def copy(self, source):
         if isinstance(source, TimerConfig):
             self.timer_mgr_mode = source.timer_mgr_mode
+            self.timer_name = source.timer_name.copy()
             self.timer_mode = source.timer_mode.copy()
             self.timer_data = source.timer_data.copy()
             self.timer_alarm_sound = source.timer_alarm_sound
@@ -65,6 +70,11 @@ class TimerConfig(object):
                 fallback='Standalone')]
             for i in [0, 1]:
                 section = SECTION_TIMER_PREFIX + str(i)
+                self.timer_name[i] = config.get(
+                    section, TIMER_NAME,
+                    fallback=DEFAULT_TIMER0_NAME if i == 0 else
+                    DEFAULT_TIMER1_NAME
+                )
                 self.timer_mode[i] = TimerMode[config.get(
                     section, TIMER_MODE, fallback='OneShot')]
                 self.timer_data[i].set_from_string(config.get(
@@ -105,6 +115,7 @@ class TimerConfig(object):
         for i, mode in enumerate(self.timer_mode):
             section = SECTION_TIMER_PREFIX + str(i)
             config.add_section(section)
+            config.set(section, TIMER_NAME, self.timer_name[i])
             config.set(section, TIMER_MODE, mode.name)
             config.set(section, TIMER_DATA, self.timer_data[i].get_str())
 

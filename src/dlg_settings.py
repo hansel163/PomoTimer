@@ -13,6 +13,9 @@ class MyDlgSettings(DlgSettings):
             self.timer_config.timer_mgr_mode.value
         )
         for idx in [0, 1]:
+            self.m_textTimerNames[idx].SetValue(
+                self.timer_config.timer_name[idx]
+            )
             self.m_chkCyclings[idx].SetValue(
                 (self.timer_config.timer_mode[idx] == TimerMode.Cycling)
             )
@@ -39,6 +42,7 @@ class MyDlgSettings(DlgSettings):
 
     def __init__(self, parent, timer_config):
         DlgSettings.__init__(self, parent)
+        self.m_textTimerNames = [self.m_textTimerName0, self.m_textTimerName1]
         self.m_chkCyclings = [self.m_chkCycling0, self.m_chkCycling1]
         self.m_spinHours = [self.m_spinHour0, self.m_spinHour1]
         self.m_spinMinutes = [self.m_spinMinute0, self.m_spinMinute1]
@@ -93,6 +97,8 @@ class MyDlgSettings(DlgSettings):
             self.timer_config.timer_mode[idx] = \
                 TimerMode.Cycling if self.m_chkCyclings[idx].GetValue() \
                 else TimerMode.OneShot
+            self.timer_config.timer_name[idx] = \
+                self.m_textTimerNames[idx].GetValue()
 
         self.timer_config.timer_alarm_sound = self.m_chkAlarmSound.GetValue()
         self.timer_config.timer_alarm_sound_file = \

@@ -242,7 +242,7 @@ class MainFrame ( wx.Frame ):
 class DlgSettings ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,478 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Settings", pos = wx.DefaultPosition, size = wx.Size( 494,549 ), style = wx.DEFAULT_DIALOG_STYLE|wx.STAY_ON_TOP )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
@@ -254,6 +254,20 @@ class DlgSettings ( wx.Dialog ):
 		bSizerDlgMain.Add( self.m_TimerMgrMode, 0, wx.ALL|wx.EXPAND, 5 )
 
 		sbSizerTimer0 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer0" ), wx.VERTICAL )
+
+		bSizerTimerName0 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticTimerName0 = wx.StaticText( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, u"Name:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticTimerName0.Wrap( -1 )
+
+		bSizerTimerName0.Add( self.m_staticTimerName0, 0, wx.ALL, 5 )
+
+		self.m_textTimerName0 = wx.TextCtrl( sbSizerTimer0.GetStaticBox(), wx.ID_ANY, u"Working", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_textTimerName0.SetMaxLength( 128 )
+		bSizerTimerName0.Add( self.m_textTimerName0, 1, wx.ALL, 5 )
+
+
+		sbSizerTimer0.Add( bSizerTimerName0, 1, wx.EXPAND, 5 )
 
 		bSizerTimerData0 = wx.BoxSizer( wx.HORIZONTAL )
 
@@ -286,6 +300,20 @@ class DlgSettings ( wx.Dialog ):
 		bSizerDlgMain.Add( sbSizerTimer0, 1, wx.EXPAND, 5 )
 
 		sbSizerTimer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"Timer1" ), wx.VERTICAL )
+
+		bSizerTimerName1 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticTimerName1 = wx.StaticText( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, u"Name:", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticTimerName1.Wrap( -1 )
+
+		bSizerTimerName1.Add( self.m_staticTimerName1, 0, wx.ALL, 5 )
+
+		self.m_textTimerName1 = wx.TextCtrl( sbSizerTimer1.GetStaticBox(), wx.ID_ANY, u"Break", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_textTimerName1.SetMaxLength( 128 )
+		bSizerTimerName1.Add( self.m_textTimerName1, 1, wx.ALL, 5 )
+
+
+		sbSizerTimer1.Add( bSizerTimerName1, 1, wx.EXPAND, 5 )
 
 		bSizerTimerData1 = wx.BoxSizer( wx.HORIZONTAL )
 
