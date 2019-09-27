@@ -39,7 +39,13 @@ class TimerStateMachine(object):
 
         self.machine.add_transition(
             trigger='on_alarm', source='running',
-            dest='alarmed', before='save_prev_state')
+            dest='alarmed',
+            before='save_prev_state')
+
+        self.machine.add_transition(
+            trigger='on_start', source='alarmed',
+            dest='running', conditions='is_cycling',
+            before='save_prev_state')
 
         self.machine.add_transition(
             trigger='on_start', source='paused',
@@ -64,6 +70,9 @@ class TimerStateMachine(object):
     def prev_is_running(self):
         return self.prev_state == 'running'
 
+    def is_cycling(self):
+        return self.timer.mode == TimerMode.Cycling
+
     def on_exit_stopped(self):
         self.timer.calc_step()
 
@@ -82,7 +91,7 @@ class TimerStateMachine(object):
     def on_enter_alarmed(self):
         self.timer.manager.timer_expired(self.timer)
         if self.timer.mode == TimerMode.Cycling:
-            self.timer.restart()
+            self.timer.delay_to_restart = 2  # 1 second since the gap may < 1s
         else:
             self.timer.step = 1  # do count-up
 

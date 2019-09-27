@@ -1,3 +1,4 @@
+import copy
 import configparser
 from common import *
 from pomo_timer import TimerData
@@ -34,9 +35,9 @@ DEFAULT_ALARM_DURATION = 8
 class TimerConfig(object):
     def reset(self):
         self.timer_mgr_mode = DFT_TIMER_MGR_MODE
-        self.timer_mode = DFT_TIMER_MODE
-        self.timer_data = DFT_TIMER_DATA
-        self.timer_name = DFT_TIMER_NAME
+        self.timer_mode = copy.deepcopy(DFT_TIMER_MODE)
+        self.timer_data = copy.deepcopy(DFT_TIMER_DATA)
+        self.timer_name = copy.deepcopy(DFT_TIMER_NAME)
         self.timer_alarm_sound = DFT_ALARM_SOUND
         self.timer_alarm_sound_file = DFT_ALAMR_SOUND_FILE
         self.timer_alarm_notification = DFT_ALARM_NOTIFICATION
@@ -46,17 +47,17 @@ class TimerConfig(object):
     def __init__(self, cfg_file=CONFIG_FILE):
         super().__init__()
         self.reset()
-        self.cfg_file = cfg_file
-
         if cfg_file:
             self.read_config_file(cfg_file)
 
     def copy(self, source):
         if isinstance(source, TimerConfig):
             self.timer_mgr_mode = source.timer_mgr_mode
-            self.timer_name = source.timer_name.copy()
-            self.timer_mode = source.timer_mode.copy()
-            self.timer_data = source.timer_data.copy()
+
+            self.timer_name = copy.deepcopy(source.timer_name)
+            self.timer_mode = copy.deepcopy(source.timer_mode)
+            self.timer_data = copy.deepcopy(source.timer_data)
+
             self.timer_alarm_sound = source.timer_alarm_sound
             self.timer_alarm_sound_file = source.timer_alarm_sound_file
             self.timer_alarm_notification = source.timer_alarm_notification
@@ -81,7 +82,7 @@ class TimerConfig(object):
                     fallback=DFT_TIMER_NAME[i]
                 )
                 self.timer_mode[i] = TimerMode[config.get(
-                    section, TIMER_MODE, fallback=DFT_TIMER_MODE.name)]
+                    section, TIMER_MODE, fallback=DFT_TIMER_MODE[i].name)]
                 self.timer_data[i].set_from_string(config.get(
                     section, TIMER_DATA,
                     fallback=DFT_TIMER_DATA[i])

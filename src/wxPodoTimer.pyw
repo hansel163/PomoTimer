@@ -124,7 +124,6 @@ class MyMainFrame(MainFrame):
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
-        self.blank_display = False  # is blank display?
         self.play_alarm_times = 0
 
         # Connect Events
@@ -164,19 +163,22 @@ class MyMainFrame(MainFrame):
 
     # Override event handler of double Click on timer display
     def m_staticHourOnLeftDClick(self, event):
-        if self.edit_target is not None:
+        state = self.timer_manager.get_current_timer_state()
+        if self.edit_target is not None or state != TimerState.Stopped:
             return
         self.show_spin_ctrl_edit(
             self.m_staticHour, self.m_spinEditHour, (MAX_HOUR - 1))
 
     def m_staticMinuteOnLeftDClick(self, event):
-        if self.edit_target is not None:
+        state = self.timer_manager.get_current_timer_state()
+        if self.edit_target is not None or state != TimerState.Stopped:
             return
         self.show_spin_ctrl_edit(
             self.m_staticMinute, self.m_spinEditMinute, (MAX_MIN_SEC - 1))
 
     def m_staticSecondOnLeftDClick(self, event):
-        if self.edit_target is not None:
+        state = self.timer_manager.get_current_timer_state()
+        if self.edit_target is not None or state != TimerState.Stopped:
             return
         self.show_spin_ctrl_edit(
             self.m_staticSecond, self.m_spinEditSecond, (MAX_MIN_SEC - 1))
@@ -198,7 +200,7 @@ class MyMainFrame(MainFrame):
         event.Skip()    # the default event handler does call Destroy()
 
     def do_secondly(self):
-        self.update_display()
+        self.update_display_secondly()
         self.update_icons()
         self.play_alarm()
         self.taskbarIcon.update()
@@ -219,6 +221,7 @@ class MyMainFrame(MainFrame):
 
     def OnClear(self, event):
         self.timer_manager.OnClear()
+        self.update_display()
 
     def show_settings(self):
         dialog = MyDlgSettings(self, self.config)
@@ -252,25 +255,17 @@ class MyMainFrame(MainFrame):
         sender = event.GetEventObject()
         self.update_target(sender.Value)
 
-    def show_blank_timer(self):
-        self.m_staticHour.SetLabel("")
-        self.m_staticMinute.SetLabel("")
-        self.m_staticSecond.SetLabel("")
-
-    def show_timer_data(self):
-        timer = self.timer_manager.get_current_timer()
-        timer_data = timer.running_timer_data
-
-        self.m_staticHour.SetLabel("{:0>2d}".format(timer_data.hour))
-        self.m_staticMinute.SetLabel("{:0>2d}".format(timer_data.minute))
-        self.m_staticSecond.SetLabel("{:0>2d}".format(timer_data.second))
-
     def set_timer_data(self):
         timer_data = TimerData()
         timer_data.hour = int(self.m_staticHour.Label)
         timer_data.minute = int(self.m_staticMinute.Label)
         timer_data.second = int(self.m_staticSecond.Label)
         self.timer_manager.get_current_timer().set_timer_data(timer_data)
+        return timer_data
+
+    # set timer data and save it to timer configure
+    def update_timer_data(self):
+        timer_data = self.set_timer_data()
         self.config.timer_data[self.timer_manager.timer_idx].copy(timer_data)
 
     def set_icon_Tn_font(self):
@@ -333,22 +328,47 @@ class MyMainFrame(MainFrame):
             self.m_btnStop.Enable()
             self.m_btnClear.Enable(False)
 
+    def show_blank_timer(self):
+        self.m_staticHour.SetLabel("")
+        self.m_staticMinute.SetLabel("")
+        self.m_staticSecond.SetLabel("")
+
+    def show_timer_data(self):
+        timer = self.timer_manager.get_current_timer()
+        timer_data = timer.running_timer_data
+
+        if int(self.m_staticHour.Label == ""  \
+                or self.m_staticHour.Label) != timer_data.hour:
+            self.m_staticHour.SetLabel("{:0>2d}".format(timer_data.hour))
+
+        if int(self.m_staticMinute.Label == ""  \
+                or self.m_staticMinute.Label) != timer_data.minute:
+            self.m_staticMinute.SetLabel("{:0>2d}".format(timer_data.minute))
+
+        if self.m_staticSecond.Label == ""  \
+            or int(self.m_staticSecond.Label) != timer_data.second:
+            self.m_staticSecond.SetLabel("{:0>2d}".format(timer_data.second))
+
     def display_timer(self, show=True):
         if show:
             self.show_timer_data()
-            self.blank_display = False
         else:
             self.show_blank_timer()
-            self.blank_display = True
 
     def update_display(self):
         state = self.timer_manager.get_current_timer_state()
         if state == TimerState.Paused:
             self.display_timer(show=self.showing)
+        else:  
+            self.display_timer()
+
+    def update_display_secondly(self):
+        state = self.timer_manager.get_current_timer_state()
+        if state == TimerState.Paused:
+            self.display_timer(show=self.showing)
         elif state == TimerState.Running  \
-                or state == TimerState.Alarmed  \
-                or self.blank_display:
-                    self.display_timer()
+            or state == TimerState.Alarmed:
+                self.display_timer()
 
     def update_view(self):
         self.update_display()
@@ -361,7 +381,7 @@ class MyMainFrame(MainFrame):
             return
 
         self.edit_target.SetLabel("{:0>2d}".format(value))
-        self.set_timer_data()
+        self.update_timer_data()
 
     def show_notification(self, msg):
         notify = wx.adv.NotificationMessage(

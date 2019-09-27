@@ -185,6 +185,9 @@ class PomoTimer():
         self.running_timer_data = TimerData()
         self.running_timer_data.copy(self.timer_data)
 
+        # running flags
+        self.delay_to_restart = -1  # delay x second to restart timer
+
     def start(self):
         self.state_machine.on_start()
 
@@ -195,7 +198,7 @@ class PomoTimer():
         self.state_machine.on_pause()
 
     def restart(self):
-        self.stop()
+        self.restore_timer()
         self.start()
 
     def set_timer_data(self, timer_data):
@@ -225,15 +228,29 @@ class PomoTimer():
         self.timer_data.clear()
         self.running_timer_data.clear()
 
+    def do_delay_to_restart(self):
+        if self.delay_to_restart < 0:
+            return
+        
+        self.delay_to_restart = self.delay_to_restart - 1
+        if self.delay_to_restart == 0:
+            self.delay_to_restart = -1
+            self.restart()
+
+    def do_second(self):
+        self.do_delay_to_restart()
+
     def tick(self):
         state = self.get_state()
-        if state == TimerState.Running or state == TimerState.Alarmed:
+        if state == TimerState.Running  \
+            or (state == TimerState.Alarmed and self.mode != TimerMode.Cycling):
             self.running_timer_data.step(self.step)
             # count-down timer is 0:0:0
             if self.running_timer_data.is_zero():
                 self.state_machine.on_alarm()
             elif self.running_timer_data.is_max():
                 self.state_machine.on_overflow()
+        self.do_second()
 
 
 class TimerManager():
