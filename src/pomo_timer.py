@@ -229,7 +229,7 @@ class PomoTimer():
         self.timer_data.clear()
         self.running_timer_data.clear()
 
-    def do_delay_to_restart(self):
+    def check_delay_to_restart(self):
         if self.delay_to_restart < 0:
             return
         
@@ -239,7 +239,7 @@ class PomoTimer():
             self.restart()
 
     def do_second(self):
-        self.do_delay_to_restart()
+        self.check_delay_to_restart()
 
     def tick(self):
         state = self.get_state()
@@ -342,6 +342,10 @@ class TimerManager():
 
     def alternate_timer(self, current_id):
         next_id = self.get_next_timer_id(current_id)
+        self.timers[current_id].stop()
+        self.timers[next_id].start()
+        self.timer_idx = next_id
+        self.frame.update_view()
 
     def timer_expired(self, timer):
         self.frame.do_alarm(timer)
