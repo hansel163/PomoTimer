@@ -58,6 +58,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
 
     def update(self):
         tooltip = "{}".format(APP_NAME)
+        alarmed = False
         for idx in range(TIMER_NUM):
             timer = self.frame.timer_manager.timers[idx]
             tooltip = tooltip + \
@@ -65,12 +66,17 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
                     idx, timer.name, timer.get_state().name,
                     timer.running_timer_data.get_str()
                 )
-        icon = self.icon
+            if timer.alarm_count > 0:  # alarmed
+                tooltip = tooltip + "  (Alarmed)"
+                alarmed = True
+
         # blink icon for alarm
         if self.frame.config.timer_alarm_blink_icon  \
-            and self.frame.play_alarm_times > 0  \
+            and alarmed  \
             and not self.frame.showing:
             icon = APP_BLANK_ICON
+        else:
+            icon = self.icon
 
         self.update_taskbar_icon(icon, tooltip)
 
@@ -123,7 +129,6 @@ class MyMainFrame(MainFrame):
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
-        self.play_alarm_times = 0
 
         # Connect Events
         self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
@@ -276,7 +281,8 @@ class MyMainFrame(MainFrame):
                 icon.SetFont(self.base_font)
 
     def update_icons(self):
-        state = self.timer_manager.get_current_timer_state()
+        timer = self.timer_manager.get_current_timer()
+        state = timer.get_state()
         # Timer Icon
         self.set_icon_Tn_font()
         for idx, icon in enumerate(self.icon_Tn):
@@ -297,7 +303,7 @@ class MyMainFrame(MainFrame):
             self.m_IconOverflow.Hide()
 
         # Alarm Icon
-        if self.play_alarm_times > 0:
+        if timer.alarm_count > 0:
             self.m_IconAlarm.Show()
         else:
             self.m_IconAlarm.Hide()
@@ -393,10 +399,15 @@ class MyMainFrame(MainFrame):
             wx.MessageBox(str(v), "Exception Message")
 
     def play_alarm(self):
-        if self.play_alarm_times == 0:
-            return
-        self.play_sound(self.config.timer_alarm_sound_file)
-        self.play_alarm_times = self.play_alarm_times - 1
+        alarm = False
+        for idx in range(TIMER_NUM):
+            timer = self.timer_manager.timers[idx]
+            if timer.alarm_count > 0:
+                alarm = True
+                timer.alarm_count = timer.alarm_count - 1
+
+        if alarm:
+            self.play_sound(self.config.timer_alarm_sound_file)
 
     def show_balloon(self, msg):
         self.taskbarIcon.ShowBalloon(
@@ -404,7 +415,8 @@ class MyMainFrame(MainFrame):
             self.config.timer_alarm_duration*1000, wx.ICON_INFORMATION)
 
     def stop_alarm(self):
-        self.play_alarm_times = 0
+        timer = self.timer_manager.get_current_timer()
+        timer.alarm_count = 0
 
     def do_alarm(self, timer):
         # set icon, start alarm
@@ -414,7 +426,8 @@ class MyMainFrame(MainFrame):
             # self.show_notification(msg)
             self.show_balloon(msg)
         if self.config.timer_alarm_sound:
-            self.play_alarm_times = self.config.timer_alarm_duration
+            timer.alarm_count = self.config.timer_alarm_duration
+            self.play_alarm()
 
 
 def main():

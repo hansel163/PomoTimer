@@ -178,6 +178,7 @@ class PomoTimer():
         self.manager = manager
         self.id = id
         self.name = name
+        self.alarm_count = 0   # to count alarm times
 
         self.step = 1
         self.mode = mode
