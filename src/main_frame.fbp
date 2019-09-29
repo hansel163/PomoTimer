@@ -2062,7 +2062,7 @@
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
                             <property name="proportion">1</property>
-                            <object class="wxBoxSizer" expanded="0">
+                            <object class="wxBoxSizer" expanded="1">
                                 <property name="minimum_size"></property>
                                 <property name="name">bSizerTimerData1</property>
                                 <property name="orient">wxHORIZONTAL</property>
@@ -2447,7 +2447,7 @@
                     <property name="border">5</property>
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">1</property>
-                    <object class="wxStaticBoxSizer" expanded="0">
+                    <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
                         <property name="label">Alarm</property>
                         <property name="minimum_size"></property>
@@ -2894,7 +2894,7 @@
                                         <property name="gripper">0</property>
                                         <property name="hidden">0</property>
                                         <property name="id">wxID_ANY</property>
-                                        <property name="initial">8</property>
+                                        <property name="initial">5</property>
                                         <property name="max">60</property>
                                         <property name="max_size"></property>
                                         <property name="maximize_button">0</property>

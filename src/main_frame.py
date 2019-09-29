@@ -379,7 +379,7 @@ class DlgSettings ( wx.Dialog ):
 
 		bSizerDuration.Add( self.m_staticDuration, 0, wx.ALL, 5 )
 
-		self.m_spinDuration = wx.SpinCtrl( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 1, 60, 8 )
+		self.m_spinDuration = wx.SpinCtrl( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, wx.ALIGN_RIGHT|wx.SP_ARROW_KEYS|wx.TE_PROCESS_ENTER, 1, 60, 5 )
 		bSizerDuration.Add( self.m_spinDuration, 0, wx.ALL, 5 )
 
 		self.m_staticText21 = wx.StaticText( sbSizerAlarm.GetStaticBox(), wx.ID_ANY, u"Second(s)", wx.DefaultPosition, wx.DefaultSize, 0 )

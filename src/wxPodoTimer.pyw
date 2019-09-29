@@ -65,14 +65,13 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
                     idx, timer.name, timer.get_state().name,
                     timer.running_timer_data.get_str()
                 )
-
-        state = self.frame.timer_manager.get_current_timer_state()
-        if state == TimerState.Alarmed \
-                and self.frame.config.timer_alarm_blink_icon \
-                and not self.frame.showing:
+        icon = self.icon
+        # blink icon for alarm
+        if self.frame.config.timer_alarm_blink_icon  \
+            and self.frame.play_alarm_times > 0  \
+            and not self.frame.showing:
             icon = APP_BLANK_ICON
-        else:
-            icon = self.icon
+
         self.update_taskbar_icon(icon, tooltip)
 
     def OnTaskBarLeftDClick(self, event):
@@ -218,6 +217,7 @@ class MyMainFrame(MainFrame):
 
     def OnStop(self, event):
         self.timer_manager.OnStop()
+        self.stop_alarm()
 
     def OnClear(self, event):
         self.timer_manager.OnClear()
@@ -277,7 +277,7 @@ class MyMainFrame(MainFrame):
 
     def update_icons(self):
         state = self.timer_manager.get_current_timer_state()
-        prev_state = self.timer_manager.get_current_timer_prev_state()
+        # Timer Icon
         self.set_icon_Tn_font()
         for idx, icon in enumerate(self.icon_Tn):
             timer_state = self.timer_manager.get_timer_state(idx)
@@ -290,23 +290,17 @@ class MyMainFrame(MainFrame):
         # show timer mode icon
         work_mode = self.timer_manager.get_work_mode()
         self.m_IconMode.SetLabel(WORKMODE_ICON_STR[work_mode])
-
-        if state == TimerState.Stopped or state == TimerState.Running:
+        # Overflow icon
+        if state == TimerState.Overflowed:
+            self.m_IconOverflow.Show()
+        else:
             self.m_IconOverflow.Hide()
+
+        # Alarm Icon
+        if self.play_alarm_times > 0:
+            self.m_IconAlarm.Show()
+        else:
             self.m_IconAlarm.Hide()
-        elif state == TimerState.Paused or state == TimerState.Overflowed:
-            if state == TimerState.Overflowed:
-                self.m_IconOverflow.Show()
-            else:
-                self.m_IconOverflow.Hide()
-
-            if prev_state == TimerState.Alarmed:
-                self.m_IconAlarm.Show(self.showing)
-            else:
-                self.m_IconAlarm.Hide()
-        elif state == TimerState.Alarmed:
-            self.m_IconOverflow.Hide()
-            self.m_IconAlarm.Show(self.showing)
 
     def update_btns(self):
         state = self.timer_manager.get_current_timer_state()
@@ -408,6 +402,9 @@ class MyMainFrame(MainFrame):
         self.taskbarIcon.ShowBalloon(
             APP_NAME, msg,
             self.config.timer_alarm_duration*1000, wx.ICON_INFORMATION)
+
+    def stop_alarm(self):
+        self.play_alarm_times = 0
 
     def do_alarm(self, timer):
         # set icon, start alarm
