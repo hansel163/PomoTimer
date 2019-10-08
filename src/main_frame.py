@@ -138,24 +138,18 @@ class MainFrame ( wx.Frame ):
 
 		bSizerButtons = wx.BoxSizer( wx.HORIZONTAL )
 
-		self.m_btnStart = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
+		self.m_btnStart = wx.Button( self, wx.ID_ANY, u"Start", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
 
-		self.m_btnStart.SetBitmap( wx.Bitmap( u"res/Start-icon-64.png", wx.BITMAP_TYPE_ANY ) )
+		self.m_btnStart.SetDefault()
 		bSizerButtons.Add( self.m_btnStart, 0, wx.ALL, 5 )
 
-		self.m_btnStop = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.m_btnStop.SetBitmap( wx.Bitmap( u"res/Stop-icon-64.png", wx.BITMAP_TYPE_ANY ) )
+		self.m_btnStop = wx.Button( self, wx.ID_ANY, u"Stop", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
 		bSizerButtons.Add( self.m_btnStop, 0, wx.ALL, 5 )
 
-		self.m_btnClear = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.m_btnClear.SetBitmap( wx.Bitmap( u"res/Clear-icon-64.png", wx.BITMAP_TYPE_ANY ) )
+		self.m_btnClear = wx.Button( self, wx.ID_ANY, u"Clear", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
 		bSizerButtons.Add( self.m_btnClear, 0, wx.ALL, 5 )
 
-		self.m_btnSet = wx.BitmapButton( self, wx.ID_ANY, wx.NullBitmap, wx.DefaultPosition, wx.DefaultSize, wx.BU_AUTODRAW|0 )
-
-		self.m_btnSet.SetBitmap( wx.Bitmap( u"res/Settings-icon-64.png", wx.BITMAP_TYPE_ANY ) )
+		self.m_btnSet = wx.Button( self, wx.ID_ANY, u"Set", wx.DefaultPosition, wx.DefaultSize, wx.BU_EXACTFIT|wx.BU_NOTEXT )
 		bSizerButtons.Add( self.m_btnSet, 0, wx.ALL, 5 )
 
 

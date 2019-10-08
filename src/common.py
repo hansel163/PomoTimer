@@ -1,9 +1,16 @@
 import enum
 import os
+import sys
 
-APP_NAME = u'wxPomoTimer'
-APP_ICON = u'res/wxPomoTimer.ico'
-APP_BLANK_ICON = u'res/blank.ico'
+APP_NAME = r'wxPomoTimer'
+APP_ICON = r'res\wxPomoTimer.ico'
+APP_BLANK_ICON = r'res\blank.ico'
+
+BTN_ICON_START = r'res\Start-icon-64.png'
+BTN_ICON_STOP = r'res\Stop-icon-64.png'
+BTN_ICON_PAUSE = r'res\Pause-icon-64.png'
+BTN_ICON_CLEAR = r'res\Clear-icon-64.png'
+BTN_ICON_SETTINGS = r'res\Settings-icon-64.png'
 
 MAX_HOUR = 100
 MAX_MIN_SEC = 60
@@ -63,3 +70,13 @@ class Utils(object):
             return max_val
         else:
             return value
+
+    @classmethod
+    def resource_path(cls, relative_path):
+        '''    Return resource path'''
+        if hasattr(sys, '_MEIPASS'):
+            # PyInstaller created temp folder and save the path to _MEIPASS
+            base_path = sys._MEIPASS
+        else:
+            base_path = os.path.abspath('.')
+        return os.path.join(base_path, relative_path)

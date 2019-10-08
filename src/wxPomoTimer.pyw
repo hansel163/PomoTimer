@@ -1,14 +1,15 @@
-#-------------------------------------------------------------------------------
-# Name:        wxPodoTimer
-# Purpose:      Main GUI for wxPodoTimer
+# -----------------------------------------------------------------------------
+# Name:        wxPomoTimer
+# Purpose:      Main GUI for wxPomoTimer
 #
 # Author:      Hansel He
 #
 # Created:     01/09/2019
 # Copyright:   (c) Hansel He 2019
 # Licence:     MIT
-#-------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 import os
+import sys
 import wx
 import wx.adv
 import time
@@ -53,7 +54,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
 
     def update_taskbar_icon(self, icon, tooltip):
         if self.IsOk():
-            self.SetIcon(wx.Icon(name=icon,
+            self.SetIcon(wx.Icon(name=Utils.resource_path(icon),
                          type=wx.BITMAP_TYPE_ICO), tooltip)
 
     def update(self):
@@ -114,6 +115,23 @@ class MyMainFrame(MainFrame):
             timer.set_timer_data(self.config.timer_data[idx])
             timer.name = self.config.timer_name[idx]
 
+    def _load_icons(self):
+        self.m_btnStop.SetBitmap(
+            wx.Bitmap(
+                Utils.resource_path(BTN_ICON_STOP),
+                wx.BITMAP_TYPE_ANY)
+        )
+        self.m_btnClear.SetBitmap(
+            wx.Bitmap(
+                Utils.resource_path(BTN_ICON_CLEAR),
+                wx.BITMAP_TYPE_ANY)
+        )
+        self.m_btnSet.SetBitmap(
+            wx.Bitmap(
+                Utils.resource_path(BTN_ICON_SETTINGS),
+                wx.BITMAP_TYPE_ANY)
+        )
+
     def __init__(self, parent):
         MainFrame.__init__(self, parent)
         icon = APP_ICON
@@ -141,14 +159,23 @@ class MyMainFrame(MainFrame):
         self.apply_config()
         self.update_view()
 
+        # load icon file to buttons
+        self._load_icons()
+
     def SetStartBtn(self, start=True):
         if start:
             self.m_btnStart.SetBitmap(
-                wx.Bitmap(u"res/Start-icon-64.png", wx.BITMAP_TYPE_ANY))
+                wx.Bitmap(
+                    Utils.resource_path(BTN_ICON_START),
+                    wx.BITMAP_TYPE_ANY)
+            )
             self.btnStartPauseState = 0
         else:
             self.m_btnStart.SetBitmap(
-                wx.Bitmap(u"res/Pause-icon-64.png", wx.BITMAP_TYPE_ANY))
+                wx.Bitmap(
+                    Utils.resource_path(BTN_ICON_PAUSE),
+                    wx.BITMAP_TYPE_ANY)
+            )
             self.btnStartPauseState = 1
         self.m_btnStart.Enable()
 
