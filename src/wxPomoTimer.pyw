@@ -137,6 +137,7 @@ class MyMainFrame(MainFrame):
         icon = APP_ICON
         self.set_frame_icon(icon)
         self.taskbarIcon = FrameTaskBarIcon(self, icon)
+        self.SetTitle("{} {}".format(APP_NAME, APP_VER))
 
         self.config = TimerConfig()
 

@@ -3,6 +3,7 @@ import os
 import sys
 
 APP_NAME = r'wxPomoTimer'
+APP_VER = '1.0'
 APP_ICON = r'res\wxPomoTimer.ico'
 APP_BLANK_ICON = r'res\blank.ico'
 
