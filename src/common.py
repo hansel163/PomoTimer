@@ -81,3 +81,12 @@ class Utils(object):
         else:
             base_path = os.path.abspath('.')
         return os.path.join(base_path, relative_path)
+
+    @classmethod
+    def get_script_path(cls):
+        return os.path.dirname(os.path.realpath(sys.argv[0]))
+
+    @classmethod
+    def get_real_cfg_file(cls, cfg_file):
+        ''' Add path of script to the configure file '''
+        return os.path.join(cls.get_script_path(), cfg_file)

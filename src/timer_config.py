@@ -1,3 +1,4 @@
+import sys
 import copy
 import configparser
 from common import *
@@ -65,12 +66,13 @@ class TimerConfig(object):
             self.timer_alarm_duration = source.timer_alarm_duration
 
     def read_config_file(self, cfg_file):
-        if not Utils.is_file_access(cfg_file):
+        file = Utils.get_real_cfg_file(cfg_file)
+        if not Utils.is_file_access(file):
             return False
         self.cfg_file = cfg_file
         config = configparser.ConfigParser()
         try:
-            config.read(cfg_file)
+            config.read(file)
             self.timer_mgr_mode = TimerMgrMode[config.get(
                 SECTION_TIMER_MGR,
                 TIMER_MGR_MODE,
@@ -140,7 +142,8 @@ class TimerConfig(object):
         config.set(
             SECTION_ALARM, ALARM_DURATION, str(self.timer_alarm_duration))
         try:
-            config.write(open(cfg_file, "w"))
+            file = Utils.get_real_cfg_file(cfg_file)
+            config.write(open(file, "w"))
         except Exception:
             result = False
 
