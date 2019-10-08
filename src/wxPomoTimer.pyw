@@ -46,7 +46,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
         wx.adv.TaskBarIcon.__init__(self)
         self.frame = frame
         self.icon = icon
-        self.SetIcon(wx.Icon(name=icon,
+        self.SetIcon(wx.Icon(name=Utils.resource_path(icon),
                              type=wx.BITMAP_TYPE_ICO), APP_NAME)
         self.Bind(wx.adv.EVT_TASKBAR_LEFT_DCLICK, self.OnTaskBarLeftDClick)
         self.Bind(wx.EVT_MENU, self.OnMenuExit, id=self.ID_MENU_EXIT)
@@ -105,7 +105,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
 # Implementing MainFrame
 class MyMainFrame(MainFrame):
     def set_frame_icon(self, icon):
-        self.SetIcon(wx.Icon(icon, wx.BITMAP_TYPE_ICO))
+        self.SetIcon(wx.Icon(Utils.resource_path(icon), wx.BITMAP_TYPE_ICO))
 
     def apply_config(self):
         self.timer_manager.set_mode(self.config.timer_mgr_mode)
