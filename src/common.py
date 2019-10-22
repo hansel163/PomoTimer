@@ -88,5 +88,8 @@ class Utils(object):
 
     @classmethod
     def get_real_cfg_file(cls, cfg_file):
-        ''' Add path of script to the configure file '''
-        return os.path.join(cls.get_script_path(), cfg_file)
+        if os.path.isabs(cfg_file):
+            return cfg_file
+        else:
+            ''' Add path of script to the configure file '''
+            return os.path.join(cls.get_script_path(), cfg_file)

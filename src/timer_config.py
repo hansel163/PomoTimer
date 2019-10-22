@@ -48,8 +48,8 @@ class TimerConfig(object):
     def __init__(self, cfg_file=CONFIG_FILE):
         super().__init__()
         self.reset()
-        if cfg_file:
-            self.read_config_file(cfg_file)
+        self.cfg_file = Utils.get_real_cfg_file(cfg_file)
+        self.read_config()
 
     def copy(self, source):
         if isinstance(source, TimerConfig):
@@ -66,13 +66,12 @@ class TimerConfig(object):
             self.timer_alarm_duration = source.timer_alarm_duration
 
     def read_config_file(self, cfg_file):
-        file = Utils.get_real_cfg_file(cfg_file)
-        if not Utils.is_file_access(file):
+        if not Utils.is_file_access(cfg_file):
             return False
-        self.cfg_file = cfg_file
+
         config = configparser.ConfigParser()
         try:
-            config.read(file)
+            config.read(cfg_file)
             self.timer_mgr_mode = TimerMgrMode[config.get(
                 SECTION_TIMER_MGR,
                 TIMER_MGR_MODE,
