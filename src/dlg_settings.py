@@ -19,6 +19,7 @@ class MyDlgSettings(DlgSettings):
             self.m_chkCyclings[idx].SetValue(
                 (self.timer_config.timer_mode[idx] == TimerMode.Cycling)
             )
+            self.cycling_pre_value[idx] = self.m_chkCyclings[idx].GetValue()
             self.m_spinHours[idx].SetValue(
                 str(self.timer_config.timer_data[idx].hour)
             )
@@ -39,6 +40,9 @@ class MyDlgSettings(DlgSettings):
             self.timer_config.timer_alarm_blink_icon
         )
         self.m_spinDuration.SetValue(self.timer_config.timer_alarm_duration)
+        self.apply_timer_mgr_mode(
+            self.timer_config.timer_mgr_mode == TimerMgrMode.Alternation
+            )
 
     def __init__(self, parent, timer_config):
         DlgSettings.__init__(self, parent)
@@ -69,10 +73,9 @@ class MyDlgSettings(DlgSettings):
 
         dlg.Destroy()
 
-    def m_TimerMgrModeOnRadioBox(self, event):
-        selection = self.m_TimerMgrMode.GetSelection()
-        # disable cycling if alternation mode
-        if selection == 1:  # Alernation mode
+    def apply_timer_mgr_mode(self, alternation=False):
+        if alternation:  # Alernation mode
+            # save previous timer mode
             self.cycling_pre_value = [self.m_chkCycling0.GetValue(),
                                       self.m_chkCycling1.GetValue()]
             self.m_chkCycling0.SetValue(False)
@@ -84,6 +87,11 @@ class MyDlgSettings(DlgSettings):
             self.m_chkCycling1.SetValue(self.cycling_pre_value[1])
             self.m_chkCycling0.Enable(True)
             self.m_chkCycling1.Enable(True)
+
+    def m_TimerMgrModeOnRadioBox(self, event):
+        selection = self.m_TimerMgrMode.GetSelection()
+        # disable cycling if alternation mode
+        self.apply_timer_mgr_mode(selection == 1)
 
     def m_btnOKOnButtonClick(self, event):
         selection = self.m_TimerMgrMode.GetSelection()

@@ -73,8 +73,7 @@ class FrameTaskBarIcon(wx.adv.TaskBarIcon):
 
         # blink icon for alarm
         if self.frame.config.timer_alarm_blink_icon  \
-            and alarmed  \
-            and not self.frame.showing:
+                and alarmed and not self.frame.showing:
             icon = APP_BLANK_ICON
         else:
             icon = self.icon
@@ -434,7 +433,7 @@ class MyMainFrame(MainFrame):
                 alarm = True
                 timer.alarm_count = timer.alarm_count - 1
 
-        if alarm:
+        if alarm and self.config.timer_alarm_sound:
             self.play_sound(self.config.timer_alarm_sound_file)
 
     def show_balloon(self, msg):
@@ -453,8 +452,8 @@ class MyMainFrame(MainFrame):
         if self.config.timer_alarm_notification:
             # self.show_notification(msg)
             self.show_balloon(msg)
+        timer.alarm_count = self.config.timer_alarm_duration
         if self.config.timer_alarm_sound:
-            timer.alarm_count = self.config.timer_alarm_duration
             self.play_alarm()
 
 
