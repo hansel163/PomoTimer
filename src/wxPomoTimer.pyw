@@ -13,6 +13,8 @@ import sys
 import wx
 import wx.adv
 import time
+import winsound
+import threading
 from main_frame import *
 from pomo_timer import *
 from events import *
@@ -37,6 +39,38 @@ class MainApp(wx.App):
     def OnExit(self):
         return super().OnExit()
 
+
+class AlarmThread(threading.Thread):
+    def __init__(self, sound_file=None, alarm_count=0):
+        super(AlarmThread, self).__init__()
+        self.exit_flag = False
+        self.sound_file = sound_file
+        self.alarm_count = alarm_count
+        self.sleep = 1
+        self.running = False
+
+    def play_alarm(self, sound_file, alarm_count):
+        self.sound_file = sound_file
+        self.alarm_count = alarm_count
+
+    def stop_alarm(self):
+        self.alarm_count = 0
+
+    def _do_play_sound(self):
+        if self.sound_file is not None:
+            try:
+                winsound.PlaySound(self.sound_file,
+                               winsound.SND_FILENAME)
+            except Exception:
+                pass
+
+    def run(self):
+        self.running = True
+        while (alarm_count > 0):
+            self.alarm_count -= 1
+            self._do_play_sound()
+            time.sleep(self.sleep)
+        self.running = False
 
 class FrameTaskBarIcon(wx.adv.TaskBarIcon):
     ID_MENU_EXIT = wx.NewId()
@@ -113,6 +147,7 @@ class MyMainFrame(MainFrame):
             self.timer_manager.set_timer_mode(idx, self.config.timer_mode[idx])
             timer.set_timer_data(self.config.timer_data[idx])
             timer.name = self.config.timer_name[idx]
+        self.sound = wx.adv.Sound(self.config.timer_alarm_sound_file)
 
     def _load_icons(self):
         self.m_btnStop.SetBitmap(
@@ -147,6 +182,7 @@ class MyMainFrame(MainFrame):
         self.edit_target = None
         self.btnStartPauseState = 0  # Start
         self.showing = True   # for icon or timer blinking
+        self.sound = None
 
         # Connect Events
         self.Bind(EVT_TIMER_TICK, self.OnTimerTick)
@@ -416,12 +452,15 @@ class MyMainFrame(MainFrame):
             message=msg, parent=None, flags=wx.ICON_INFORMATION)
         notify.Show(timeout=6)  # 1 for short timeout, 100 for long timeout
 
-    def play_sound(self, file):
+    def play_sound(self, file=None):
         try:
-            sound = wx.adv.Sound(file)
-            sound.Play(wx.adv.SOUND_ASYNC)
-            # save a reference (shoudle no need, but a bug...)
-            self.sound = sound
+            # if file is not None load it, otherwise use default file
+            if file:
+                self.sound = wx.adv.Sound(file)
+            if self.sound.IsOk():
+                # self.sound.Play(wx.adv.SOUND_ASYNC)
+                winsound.PlaySound('res\\sound\\beep0.wav',
+                                   winsound.SND_FILENAME | winsound.SND_ASYNC)
         except NotImplementedError as v:
             wx.MessageBox(str(v), "Exception Message")
 
